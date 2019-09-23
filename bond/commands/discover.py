@@ -7,10 +7,9 @@ class DiscoverCommand(BaseCommand):
     subcmd = 'discover'
 
     def run(self, args):
-        table = Table(['Bond ID', 'IP Address'])
+        table = Table(['bondid', 'ip'])
         scanner = Scanner(table.add_row)
         time.sleep(5)
-        table.close()
 
 def register():
     DiscoverCommand()

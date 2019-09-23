@@ -11,5 +11,13 @@ for use by:
 ## Getting Started
 
 ```
-bond help
+python -m bond -h
+```
+
+```
+python -m bond discover
+```
+
+```
+python -m bond version
 ```

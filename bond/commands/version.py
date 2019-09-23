@@ -1,14 +1,28 @@
 from .base_command import BaseCommand
 from bond.cli.table import Table
 import time
+import bond.database
+from bond.proto import get_all_async
 
 class VersionCommand(BaseCommand):
     subcmd = 'version'
 
     def run(self, args):
         table = Table(['Bond ID', 'Target', 'Version'])
-        time.sleep(5)
-        table.close()
+        threads = get_all_async(
+            topic='sys/version',
+            on_success = lambda bondid, rsp:
+                         table.add_row({
+                             "Bond ID": bondid,
+                             "Target": rsp['b']['target'],
+                             "Version": rsp['b']['fw_ver'],
+                         }),
+            on_error = lambda bondid, e:
+                         table.add_row({
+                             "Bond ID": bondid,
+                         }),
+            )
+        [ t.join() for t in threads ]
 
 def register():
-    DiscoverCommand()
+    VersionCommand()

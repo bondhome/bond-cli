@@ -5,6 +5,9 @@ import bond.database
 COMMANDS = [
     'discover',
     'select',
+    'version',
+    'add',
+    'list',
     ]
 
 def run():

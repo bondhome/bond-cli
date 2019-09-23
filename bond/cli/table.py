@@ -23,8 +23,13 @@ class Table(object):
 
     def add_row(self, row):
         if self.open:
-            self.print_tabbed([ row[h] for h in self.header ])
+            self.print_tabbed([
+                (row[h] if h in row else '?')
+                for h in self.header ])
 
     def close(self):
         self.print_boarder()
         self.open = False
+
+    def __del__(self):
+        self.close()

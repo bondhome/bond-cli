@@ -18,10 +18,10 @@ class SelectCommand(BaseCommand):
 
     def run(self, args):
         if args.none:
-            bond.database.set('selected_bond', None)
+            bond.database.set('selected_bondid', None)
         elif args.bondid:
-            bond.database.set('selected_bond', args.bondid)
-        print("Selected Bond: %s" % bond.database.get('selected_bond'))
+            bond.database.set('selected_bondid', args.bondid)
+        print("Selected Bond: %s" % bond.database.get('selected_bondid'))
 
 def register():
     SelectCommand()
