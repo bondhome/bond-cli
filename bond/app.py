@@ -6,7 +6,7 @@ COMMANDS = [
     'discover',
     'select',
     'version',
-    'add',
+    'token',
     'list',
     ]
 

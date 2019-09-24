@@ -2,8 +2,7 @@ import importlib
 import argparse
 
 _parser = argparse.ArgumentParser(prog='bond')
-_subparsers = _parser.add_subparsers(dest='subparser_name',
-    help='sub-command help')
+_subparsers = _parser.add_subparsers(dest='subparser_name')
 _parser.set_defaults(func=lambda x: None)
 
 def load_commands(COMMANDS):
@@ -13,7 +12,8 @@ def load_commands(COMMANDS):
 
 def register(command):
     name = str(command)
-    parser_a = _subparsers.add_parser(name)
+    help = command.help if hasattr(command, 'help') else None
+    parser_a = _subparsers.add_parser(name, help=help)
     parser_a.set_defaults(func=command.run)
     if hasattr(command, 'arguments'):
         for argument in command.arguments:

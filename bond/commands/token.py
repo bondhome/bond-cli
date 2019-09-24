@@ -2,12 +2,13 @@ from .base_command import BaseCommand
 import bond.database
 from bond.cli.console import Logline
 
-class AddCommand(BaseCommand):
-    subcmd = 'add'
+class TokenCommand(BaseCommand):
+    subcmd = 'token'
+    help = "Manage token-based authentication."
     arguments = [
         (
-            ['token'],
-            {'help': 'Bond local token'}
+            ['TOKEN'],
+            {'help': 'Save Bond token to local database'}
         ),
     ]
 
@@ -23,4 +24,4 @@ class AddCommand(BaseCommand):
         bond.database.set('bonds', bonds)
 
 def register():
-    AddCommand()
+    TokenCommand()

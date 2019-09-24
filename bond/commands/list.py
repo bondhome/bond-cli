@@ -4,6 +4,7 @@ from bond.cli.table import Table
 
 class ListCommand(BaseCommand):
     subcmd = 'list'
+    help = "List Bonds in local database."
 
     def run(self, args):
         table = Table(['bondid', 'ip', 'token'])

@@ -5,6 +5,7 @@ import time
 
 class DiscoverCommand(BaseCommand):
     subcmd = 'discover'
+    help = "Discover Bonds on local network."
 
     def run(self, args):
         table = Table(['bondid', 'ip', 'port'])

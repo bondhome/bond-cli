@@ -4,9 +4,10 @@ from ..cli.console import Logline
 
 class SelectCommand(BaseCommand):
     subcmd = 'select'
+    help = "Select a single Bond to interact with."
     arguments = [
         (
-            ['bondid'],
+            ['BONDID'],
             {'nargs': '?',
              'help': 'Bond ID to interact with in subsequent commands'}
         ),
@@ -26,14 +27,14 @@ class SelectCommand(BaseCommand):
     ]
 
     def run(self, args):
-        if args.bondid:
-            bond.database.set('selected_bondid', args.bondid)
+        if args.BONDID:
+            bond.database.set('selected_bondid', args.BONDID)
             if args.ip:
-                bond.database.set_bond(args.bondid, 'ip', args.ip)
-                Logline("Set %s IP %s" % (args.bondid, args.ip))
+                bond.database.set_bond(args.BONDID, 'ip', args.ip)
+                Logline("Set %s IP %s" % (args.BONDID, args.ip))
             if args.port:
-                bond.database.set_bond(args.bondid, 'port', args.port)
-                Logline("Set %s port %s" % (args.bondid, args.ip))
+                bond.database.set_bond(args.BONDID, 'port', args.port)
+                Logline("Set %s port %s" % (args.BONDID, args.ip))
         if args.none:
             bond.database.set('selected_bondid', None)
         Logline("Selected Bond: %s" % bond.database.get('selected_bondid'))

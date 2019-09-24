@@ -6,6 +6,7 @@ from bond.proto import get_all_async
 
 class VersionCommand(BaseCommand):
     subcmd = 'version'
+    help = "Get firwmare version."
 
     def run(self, args):
         table = Table(['Bond ID', 'Target', 'Version'])
