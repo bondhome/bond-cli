@@ -1,6 +1,6 @@
 from .base_command import BaseCommand
 import bond.database
-from ..cli.console import Logline
+from ..cli.console import LogLine
 
 class SelectCommand(BaseCommand):
     subcmd = 'select'
@@ -31,13 +31,13 @@ class SelectCommand(BaseCommand):
             bond.database.set('selected_bondid', args.BONDID)
             if args.ip:
                 bond.database.set_bond(args.BONDID, 'ip', args.ip)
-                Logline("Set %s IP %s" % (args.BONDID, args.ip))
+                LogLine("Set %s IP %s" % (args.BONDID, args.ip))
             if args.port:
                 bond.database.set_bond(args.BONDID, 'port', args.port)
-                Logline("Set %s port %s" % (args.BONDID, args.ip))
+                LogLine("Set %s port %s" % (args.BONDID, args.ip))
         if args.none:
             bond.database.set('selected_bondid', None)
-        Logline("Selected Bond: %s" % bond.database.get('selected_bondid'))
+        LogLine("Selected Bond: %s" % bond.database.get('selected_bondid'))
 
 def register():
     SelectCommand()

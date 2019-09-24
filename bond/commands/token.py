@@ -1,6 +1,6 @@
 from .base_command import BaseCommand
 import bond.database
-from bond.cli.console import Logline
+from bond.cli.console import LogLine
 
 class TokenCommand(BaseCommand):
     subcmd = 'token'
@@ -17,10 +17,10 @@ class TokenCommand(BaseCommand):
         bonds = bond.database.get_bonds()
         if bondid not in bonds.keys():
             bonds[bondid] = dict()
-            Logline("Adding new Bond to local database.")
+            LogLine("Adding new Bond to local database.")
         else:
-            Logline("Updating token for existing Bond.")
-        bonds[bondid]['token'] = args.token
+            LogLine("Updating token for existing Bond.")
+        bonds[bondid]['token'] = args.TOKEN
         bond.database.set('bonds', bonds)
 
 def register():

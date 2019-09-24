@@ -8,6 +8,7 @@ COMMANDS = [
     'version',
     'token',
     'list',
+    'devices',
     ]
 
 def run():
