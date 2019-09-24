@@ -1,12 +1,11 @@
 from .base_transport import BaseTransport
 import requests
 import json
-from .mdns import get_ip
 
 class HTTP_Transport(BaseTransport):
-    def __init__(self, bondid, port, token):
+    def __init__(self, bondid, hostname, port, token):
         self.bondid = bondid
-        self._hostname = get_ip(bondid)
+        self._hostname = hostname
         self._port = port
         self._token = token
         self._token_in_header = True

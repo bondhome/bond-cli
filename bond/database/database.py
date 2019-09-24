@@ -1,10 +1,13 @@
 import json
 import os
+import threading
 
 db = dict()
 
 DB_FILENAME = os.path.expanduser('~/.bond/db.json')
 DB_DIRNAME = os.path.dirname(DB_FILENAME)
+
+lock = threading.RLock()
 
 def load():
     global db
