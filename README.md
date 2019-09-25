@@ -35,6 +35,8 @@ List devices:
 python -m bond devices
 ```
 
+## Injecting Devices
+
 Create a template device:
 
 ```
@@ -43,7 +45,15 @@ python -m bond device_create --name "Formidable Fan" --template A1 --addr 101 --
 
 You can then see the fan on your Bond Home app.
 
-More to come!
+## Live Logging
+
+You can also start a livelog:
+
+```
+python -m bond livelog --info
+```
+
+## Getting Help
 
 Get more help with:
 
