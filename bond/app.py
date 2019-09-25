@@ -9,6 +9,7 @@ COMMANDS = [
     'token',
     'list',
     'devices',
+    'device_create',
     ]
 
 def run():

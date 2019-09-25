@@ -10,14 +10,43 @@ for use by:
 
 ## Getting Started
 
-```
-python -m bond -h
-```
+Find Bonds on local network:
 
 ```
 python -m bond discover
 ```
 
+Check their firmware versions:
+
 ```
 python -m bond version
+```
+
+Select a Bond and set the token so we can go deeper:
+
+```
+python -m bond select KX12345
+python -m bond token a938b2010cb203
+```
+
+List devices:
+
+```
+python -m bond devices
+```
+
+Create a template device:
+
+```
+python -m bond device_create --name "Formidable Fan" --template A1 --addr 101 --freq 300000 --bps 1000 --zero_gap 1234
+```
+
+You can then see the fan on your Bond Home app.
+
+More to come!
+
+Get more help with:
+
+```
+python -m bond -h
 ```

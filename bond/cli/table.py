@@ -1,11 +1,13 @@
+from .console import lock
 
 class Table(object):
     col_width = 16
 
     def __init__(self, header):
+        lock.acquire()
+        self.open = True
         self.header = header
         self.print_header()
-        self.open = True
 
     def print_tabbed(self, lst):
         print('|', end='')
@@ -28,8 +30,16 @@ class Table(object):
                 for h in self.header ])
 
     def close(self):
-        self.print_boarder()
-        self.open = False
+        if self.open:
+            self.print_boarder()
+            lock.release()
+            self.open = False
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
 
     def __del__(self):
         self.close()

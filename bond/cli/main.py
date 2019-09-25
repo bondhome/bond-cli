@@ -1,5 +1,6 @@
 import importlib
 import argparse
+from .console import console_terminate
 
 _parser = argparse.ArgumentParser(prog='bond')
 _subparsers = _parser.add_subparsers(dest='subparser_name')
