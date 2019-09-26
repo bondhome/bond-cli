@@ -3,15 +3,16 @@ import sys
 import bond.database
 
 COMMANDS = [
-    'discover',
-    'select',
-    'version',
-    'token',
-    'list',
-    'devices',
-    'device_create',
-    'livelog',
-    ]
+    "discover",
+    "select",
+    "version",
+    "token",
+    "list",
+    "devices",
+    "device_create",
+    "livelog",
+]
+
 
 def run():
     bond.database.load()
