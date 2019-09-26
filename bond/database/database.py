@@ -4,10 +4,11 @@ import threading
 
 db = dict()
 
-DB_FILENAME = os.path.expanduser('~/.bond/db.json')
+DB_FILENAME = os.path.expanduser("~/.bond/db.json")
 DB_DIRNAME = os.path.dirname(DB_FILENAME)
 
 lock = threading.RLock()
+
 
 def load():
     global db
@@ -19,13 +20,16 @@ def load():
             os.makedirs(DB_DIRNAME)
         _save()
 
+
 def _save():
-    with open(DB_FILENAME, 'w') as f:
+    with open(DB_FILENAME, "w") as f:
         json.dump(db, f, indent=2)
+
 
 def set(key, value):
     db[key] = value
     _save()
+
 
 def get(key):
     if key in db:
