@@ -10,6 +10,7 @@ COMMANDS = [
     'list',
     'devices',
     'device_create',
+    'livelog',
     ]
 
 def run():
