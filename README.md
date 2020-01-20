@@ -1,5 +1,7 @@
 # Bond Command Line Interface
 
+EDIT: This project is in an ALPHA state. We released it on the principle of release early & often. However, we cannot support this code in its current state, and it is not being actively developed. It is here just in case it benefits a member of the Bond Home community. Your mileage may vary!
+
 ## Purpose
 
 This tool exists to make it easy to manipulate a Bond from a command line,
