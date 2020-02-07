@@ -33,8 +33,8 @@ class HTTP_Transport(BaseTransport):
         if self._token_in_body:
             body["_token"] = self._token
         if self._token_in_header:
-            headers = {"BOND-Token": self._token}
-        if not (uuid is None):
+            headers["BOND-Token"] = self._token
+        if uuid is not None:
             headers["BOND-UUID"] = uuid
         r = method(
             self.root_url + topic,
