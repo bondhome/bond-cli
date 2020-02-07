@@ -36,7 +36,7 @@ class HTTP_Transport(BaseTransport):
             headers["BOND-Token"] = self._token
         if uuid is not None:
             headers["BOND-UUID"] = uuid
-        r = method(
+        rsp = method(
             self.root_url + topic,
             data=json.dumps(body),
             headers=headers,
@@ -47,5 +47,4 @@ class HTTP_Transport(BaseTransport):
             body = json.loads(r.text)
         except:
             body = None
-        rsp = {"s": r.status_code, "b": body, "bondid": self.bondid}
-        return rsp
+        return {"s": r.status_code, "b": body, "bondid": self.bondid}
