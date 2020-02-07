@@ -6,37 +6,28 @@ import json
 class HTTP_Transport(BaseTransport):
     def __init__(self, bondid, hostname, port, token):
         self.bondid = bondid
-        self._hostname = hostname
-        self._port = port
         self._token = token
         self._token_in_header = True
         self._token_in_body = False
+        self.root_url = f"http://{hostname}:{port}/v2/"
 
-    def get(self, topic="", body=None, uuid=None, timeout=None):
-        body = {} if body is None else body
-        return self.request(requests.get, topic, body, uuid, timeout)
+    def get(self, **kwargs):
+        return self.request(requests.get, **kwargs)
 
-    def post(self, topic="", body=None, uuid=None, timeout=None):
-        body = {} if body is None else body
-        return self.request(requests.post, topic, body, uuid, timeout)
+    def post(self, **kwargs):
+        return self.request(requests.post, **kwargs)
 
-    def put(self, topic="", body=None, uuid=None, timeout=None):
-        body = {} if body is None else body
-        return self.request(requests.put, topic, body, uuid, timeout)
+    def put(self, **kwargs):
+        return self.request(requests.put, **kwargs)
 
-    def delete(self, topic="", body=None, uuid=None, timeout=None):
-        body = {} if body is None else body
-        return self.request(requests.delete, topic, body, uuid, timeout)
+    def patch(self, **kwargs):
+        return self.request(requests.patch, **kwargs)
 
-    def patch(self, topic="", body=None, uuid=None, timeout=None):
-        body = {} if body is None else body
-        return self.request(requests.patch, topic, body, uuid, timeout)
+    def delete(self, **kwargs):
+        return self.request(requests.delete, **kwargs)
 
-    def request(self, method=None, topic="", body=None, uuid=None, timeout=None):
-        url = "http://" + self._hostname + ":" + str(self._port) + "/v2/" + topic
+    def request(self, method=None, topic="", body=None, uuid=None, timeout=2):
         headers = {}
-        if timeout is None:
-            timeout = 2
         if body is None:
             body = {}
         if self._token_in_body:
@@ -45,7 +36,12 @@ class HTTP_Transport(BaseTransport):
             headers = {"BOND-Token": self._token}
         if not (uuid is None):
             headers["BOND-UUID"] = uuid
-        r = method(url, data=json.dumps(body), headers=headers, timeout=timeout)
+        r = method(
+            self.root_url + topic,
+            data=json.dumps(body),
+            headers=headers,
+            timeout=timeout,
+        )
         # TODO: add other fields like i, f, and t
         try:
             body = json.loads(r.text)
