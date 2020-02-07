@@ -26,7 +26,7 @@ class HTTP_Transport(BaseTransport):
     def delete(self, **kwargs):
         return self.request(requests.delete, **kwargs)
 
-    def request(self, method=None, topic="", body=None, uuid=None, timeout=2):
+    def request(self, method, topic="", body=None, uuid=None, timeout=2):
         headers = {}
         if body is None:
             body = {}
