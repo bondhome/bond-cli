@@ -47,4 +47,4 @@ class HTTP_Transport(BaseTransport):
             body = json.loads(r.text)
         except:
             body = None
-        return {"s": r.status_code, "b": body, "bondid": self.bondid}
+        return {"s": rsp.status_code, "b": body, "bondid": self.bondid}
