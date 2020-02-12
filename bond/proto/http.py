@@ -44,7 +44,7 @@ class HTTP_Transport(BaseTransport):
         )
         # TODO: add other fields like i, f, and t
         try:
-            body = json.loads(r.text)
+            body = json.loads(rsp.text)
         except:
             body = None
         return {"s": rsp.status_code, "b": body, "bondid": self.bondid}
