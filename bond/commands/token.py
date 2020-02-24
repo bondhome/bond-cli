@@ -2,6 +2,7 @@ from .base_command import BaseCommand
 import bond.database
 from bond.cli.console import LogLine
 
+
 def update_token(token):
     bondid = bond.database.get_assert_selected_bondid()
     bonds = bond.database.get_bonds()
@@ -11,6 +12,7 @@ def update_token(token):
     print(f"Updated token for {bondid}")
     bond.database.set("bonds", bonds)
 
+
 class TokenCommand(BaseCommand):
     subcmd = "token"
     help = "Manage token-based authentication."
@@ -18,6 +20,7 @@ class TokenCommand(BaseCommand):
 
     def run(self, args):
         update_token(args["Token"])
+
 
 def register():
     TokenCommand()
