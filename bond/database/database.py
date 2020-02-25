@@ -34,29 +34,27 @@ class BondDatabase(MutableMapping):
         with self.lock:
             self.db[key] = value
             self.__save()
-    
+
     def __getitem__(self, key):
         with self.lock:
             return self.db[key]
-    
+
     def __delitem__(self, key):
         with self.lock:
             del self.db[key]
-    
+
     def __iter__(self):
         return self.db.__iter__()
 
     def __len__(self):
         return len(self.db)
-    
-    
-    # Singleton static methods
 
+    # Singleton static methods
 
     @staticmethod
     def get_assert_selected_bondid(self):
         selected_bondid = BondDatabase.get("selected_bondid")
-        if not selected_bondid:
+        if selected_bondid is None:
             raise Exception("No Bond selected. Use 'bond select' first.")
         return selected_bondid
 
