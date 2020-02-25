@@ -62,7 +62,7 @@ class BondDatabase(MutableMapping):
 
     @staticmethod
     def get_bonds(self):
-        return BondDatabase.load().setdefault("bonds", dict())
+        return BondDatabase.singleton().setdefault("bonds", dict())
 
     @staticmethod
     def get_bond(bondid):
@@ -76,15 +76,15 @@ class BondDatabase(MutableMapping):
         BondDatabase.set("bonds", bonds)
 
     @staticmethod
-    def load():
+    def singleton():
         if BondDatabase.__instance is None:
             BondDatabase()
         return BondDatabase.__instance
 
     @staticmethod
     def get(key):
-        return BondDatabase.load().get(key)
+        return BondDatabase.singleton().get(key)
 
     @staticmethod
     def set(key):
-        return BondDatabase.load().set(key)
+        return BondDatabase.singleton().set(key)
