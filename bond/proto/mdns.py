@@ -1,5 +1,5 @@
 from zeroconf import ServiceBrowser, Zeroconf
-import bond.database
+from bond.database import BondDatabase
 
 
 class Listener:
@@ -14,8 +14,8 @@ class Listener:
         bondid = info.name.split(".")[0]
         ip = ".".join([str(ord(chr(byte))) for byte in info.addresses[0]])
         port = info.port
-        bond.database.set_bond(bondid, "ip", ip)
-        bond.database.set_bond(bondid, "port", port)
+        BondDatabase.set_bond(bondid, "ip", ip)
+        BondDatabase.set_bond(bondid, "port", port)
         self.on_success({"bondid": bondid, "ip": ip, "port": port})
 
 

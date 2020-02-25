@@ -15,7 +15,6 @@ class BondDatabase(MutableMapping):
         if BondDatabase.__instance is not None:
             raise Exception("This class is a singleton!")
         self.lock = RLock()
-        # TODO: handle the corner case where the path exists, but it is not a file
         if os.path.exists(DB_FILENAME):
             with open(DB_FILENAME) as db_file:
                 self.db = json.load(db_file)
@@ -28,7 +27,7 @@ class BondDatabase(MutableMapping):
     def __save(self):
         with self.lock:
             with open(DB_FILENAME, "w") as f:
-                json.dump(db, f, indent=2)
+                json.dump(self.db, f, indent=2)
 
     def __setitem__(self, key, value):
         with self.lock:
@@ -52,14 +51,14 @@ class BondDatabase(MutableMapping):
     # Singleton static methods
 
     @staticmethod
-    def get_assert_selected_bondid(self):
+    def get_assert_selected_bondid():
         selected_bondid = BondDatabase.get("selected_bondid")
         if selected_bondid is None:
             raise Exception("No Bond selected. Use 'bond select' first.")
         return selected_bondid
 
     @staticmethod
-    def get_bonds(self):
+    def get_bonds():
         return BondDatabase.singleton().setdefault("bonds", dict())
 
     @staticmethod
@@ -81,8 +80,8 @@ class BondDatabase(MutableMapping):
 
     @staticmethod
     def get(key):
-        return BondDatabase.singleton().get(key)
+        return BondDatabase.singleton()[key]
 
     @staticmethod
-    def set(key):
-        return BondDatabase.singleton().set(key)
+    def set(key, value):
+        BondDatabase.singleton()[key] = value
