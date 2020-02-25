@@ -70,11 +70,10 @@ class BondDatabase(MutableMapping):
 
     @staticmethod
     def set_bond(bondid, key, value):
-        singleton = BondDatabase.load()
-        bonds = singleton.get_bonds()
+        bonds = BondDatabase.get_bonds()
         bonds.setdefault(bondid, dict())
         bonds[bondid][key] = value
-        singleton.set("bonds", bonds)
+        BondDatabase.set("bonds", bonds)
 
     @staticmethod
     def load():
