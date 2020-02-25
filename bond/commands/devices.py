@@ -2,7 +2,6 @@ from .base_command import BaseCommand
 from bond.cli.table import Table
 from bond.cli.console import ExceptionLine
 import time
-import bond.database
 from bond.proto import get_all_async, get_async
 
 
