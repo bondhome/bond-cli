@@ -12,6 +12,7 @@ COMMANDS = [
     "livelog",
     "signal",
     "reset",
+    "wifi",
 ]
 
 
