@@ -8,7 +8,13 @@ class WifiCommand(BaseCommand):
     subcmd = "wifi"
     help = "Connect to WiFi"
     arguments = [
-        (["--ssid"], {"help": "The SSID (name) of the WiFi access point to connect to", "required": True}),
+        (
+            ["--ssid"],
+            {
+                "help": "The SSID (name) of the WiFi access point to connect to",
+                "required": True,
+            },
+        ),
         (["--password"], {"help": "The password", "required": True}),
     ]
 
@@ -27,5 +33,4 @@ class WifiCommand(BaseCommand):
 
 
 def register():
-  WifiCommand()
-
+    WifiCommand()
