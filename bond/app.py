@@ -11,6 +11,7 @@ COMMANDS = [
     "device_create",
     "livelog",
     "signal",
+    "wifi",
 ]
 
 
