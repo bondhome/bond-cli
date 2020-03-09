@@ -8,6 +8,8 @@ import random
 import time
 import sys
 
+LEVEL_MAP = {"warn": 2, "info": 3, "debug": 4, "trace": 5}
+
 
 def do_livelog(bondid, ip, port):
     bond.proto.delete(bondid, topic="debug/livelog")
@@ -38,13 +40,11 @@ class LivelogCommand(BaseCommand):
     arguments = [
         (["--ip"], {"help": "IP of log server"}),
         (["--port"], {"help": "UDP port of log server"}),
-        (["--warn"], {"help": "set verbosity to WARN", "action": "store_true"}),
-        (["--info"], {"help": "set verbosity to INFO", "action": "store_true"}),
         (
-            ["--debug"],
+            ["--level"],
             {
-                "help": "set verbosity to DEBUG (may slow the Bond)",
-                "action": "store_true",
+                "help": "set the verbosity: warn, info, debug (may slow the Bond), or trace (will definitely slow the Bond)",
+                "choices": LEVEL_MAP.keys(),
             },
         ),
     ]
@@ -54,14 +54,10 @@ class LivelogCommand(BaseCommand):
 
         log_fn = bondid + ".livelog"
 
-        if args.warn or args.info or args.debug:
-            if args.warn:
-                lvl = 2
-            if args.info:
-                lvl = 3
-            if args.debug:
-                lvl = 4
-            bond.proto.patch(bondid, topic="debug/syslog", body={"lvl": lvl})
+        if args.level:
+            bond.proto.patch(
+                bondid, topic="debug/syslog", body={"lvl": LEVEL_MAP[args.level]}
+            )
 
         if args.ip is None:
             with open(log_fn, "w+") as log:
