@@ -70,13 +70,13 @@ class LivelogCommand(BaseCommand):
             bond.proto.patch(
                 bondid, topic="debug/syslog", body={"lvl": LEVEL_MAP[args.level]}
             )
-            if args.subsys:
-                body = {"subsys": args.subsys}
-                if args.subsys_level:
-                    body["lvl"] = LEVEL_MAP[args.subsys_level]
-                bond.proto.patch(
-                    bondid, topic="debug/syslog", body=body,
-                )
+        if args.subsys:
+            body = {"subsys": args.subsys}
+            if args.subsys_level:
+                body["lvl"] = LEVEL_MAP[args.subsys_level]
+            bond.proto.patch(
+                bondid, topic="debug/syslog", body=body,
+            )
 
 
         if args.ip is None:
