@@ -2,10 +2,6 @@
 
 EDIT: This project is in an ALPHA state. We released it on the principle of release early & often. However, we cannot support this code in its current state, and it is not being actively developed. It is here just in case it benefits a member of the Bond Home community. Your mileage may vary!
 
-## Installation
-
-Install with `pip install bond-cli`
-
 ## Purpose
 
 This tool exists to make it easy to manipulate a Bond from a command line,
@@ -14,6 +10,9 @@ for use by:
  - Bond community
  - internal use in engineering and customer support
 
+## Installation
+
+Install with `pip install bond-cli`
 
 ## Getting Started
 
