@@ -11,18 +11,23 @@ class BondDatabase(MutableMapping):
 
     __instance = None
 
-    def __init__(self):
-        if BondDatabase.__instance is not None:
-            raise Exception("This class is a singleton!")
-        self.lock = RLock()
-        if os.path.exists(DB_FILENAME):
-            with open(DB_FILENAME) as db_file:
-                self.db = json.load(db_file)
-        else:
-            os.makedirs(DB_DIRNAME, exist_ok=True)
-            self.db = dict()
-            self.__save()
-        BondDatabase.__instance = self
+    def __new__(cls):
+        """Takes the place of __init__ to only return a single instance of the database.
+           That is, BondDatabase() is a singleton.
+           Note: any initialization should go here, not in a new __init__ function.
+                 any __init__ for this class will be called *on every return value of
+                 this function*!"""
+        if cls.__instance is None:
+            cls.__instance = super(BondDatabase, cls).__new__(cls)
+            cls.__instance.lock = RLock()
+            if os.path.exists(DB_FILENAME):
+                with open(DB_FILENAME) as db_file:
+                    cls.__instance.db = json.load(db_file)
+            else:
+                os.makedirs(DB_DIRNAME, exist_ok=True)
+                cls.__instance.db = dict()
+                cls.__instance.__save()
+        return cls.__instance
 
     def __save(self):
         with self.lock:
@@ -59,11 +64,11 @@ class BondDatabase(MutableMapping):
 
     @staticmethod
     def get_bonds():
-        return BondDatabase.singleton().setdefault("bonds", dict())
+        return BondDatabase().setdefault("bonds", dict())
 
     @staticmethod
     def get_bond(bondid):
-        return BondDatabase.get_bonds().get(bondid, dict())
+        return BondDatabase().get(bondid, dict())
 
     @staticmethod
     def set_bond(bondid, key, value):
@@ -73,15 +78,9 @@ class BondDatabase(MutableMapping):
         BondDatabase.set("bonds", bonds)
 
     @staticmethod
-    def singleton():
-        if BondDatabase.__instance is None:
-            BondDatabase()
-        return BondDatabase.__instance
-
-    @staticmethod
     def get(key):
-        return BondDatabase.singleton()[key]
+        return BondDatabase()[key]
 
     @staticmethod
     def set(key, value):
-        BondDatabase.singleton()[key] = value
+        BondDatabase()[key] = value
