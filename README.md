@@ -30,26 +30,26 @@ pip3 install -r bond/requirements.txt
 Find Bonds on local network:
 
 ```bash
-python3 -m bond discover
+bond discover
 ```
 
 Check their firmware versions:
 
 ```bash
-python3 -m bond version
+bond version
 ```
 
 Select a Bond and set the token so we can go deeper:
 
 ```bash
-python3 -m bond select KX12345
-python3 -m bond token a938b2010cb203
+bond select KX12345
+bond token a938b2010cb203
 ```
 
 List devices:
 
 ```bash
-python3 -m bond devices
+bond devices
 ```
 
 ## Injecting Devices
@@ -57,7 +57,7 @@ python3 -m bond devices
 Create a template device:
 
 ```bash
-python3 -m bond device_create --name "Formidable Fan" --template A1 --addr 101 --freq 300000 --bps 1000 --zero_gap 1234
+bond device_create --name "Formidable Fan" --template A1 --addr 101 --freq 300000 --bps 1000 --zero_gap 1234
 ```
 
 You can then see the fan on your Bond Home app.
@@ -67,7 +67,7 @@ You can then see the fan on your Bond Home app.
 You can also start a livelog:
 
 ```bash
-python3 -m bond livelog --info
+bond livelog --info
 ```
 
 ## Getting Help
@@ -75,5 +75,5 @@ python3 -m bond livelog --info
 Get more help with:
 
 ```bash
-python3 -m bond -h
+bond -h
 ```

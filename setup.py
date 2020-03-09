@@ -6,9 +6,10 @@ DEPS_TEST = DEPS_ALL + open('requirements-test.txt').readlines()
 
 setup(
     name='bond-cli',
-    version='0.0.2',
+    version='0.0.3',
     author='Olibra',
     packages=find_packages(),
+    scripts=['bond/bond'],
     include_package_data=True,
     description='Bond CLI',
     long_description=open('README.md').read(),
