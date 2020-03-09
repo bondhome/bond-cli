@@ -14,16 +14,6 @@ for use by:
  - Bond community
  - internal use in engineering and customer support
 
-## Requirements
-
-This project uses `Python 3`, so make sure you are not using `Python 2.7`.
-Also make sure you are using `pip` >= 3
-
-You will need to first install the required packages:
-
-```bash
-pip3 install -r bond/requirements.txt
-```
 
 ## Getting Started
 
