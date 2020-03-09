@@ -1,6 +1,8 @@
+[![PyPI version](https://badge.fury.io/py/bond-cli.svg)](https://badge.fury.io/py/bond-cli)
+
 # Bond Command Line Interface
 
-EDIT: This project is in an ALPHA state. We released it on the principle of release early & often. However, we cannot support this code in its current state, and it is not being actively developed. It is here just in case it benefits a member of the Bond Home community. Your mileage may vary!
+EDIT: This project is in a beta state. We released it on the principle of release early & often. It is here just in case it benefits a member of the Bond Home community. Your mileage may vary! Bug reports and feature requests are strongly encouraged, just open an issue!
 
 ## Purpose
 
@@ -56,7 +58,7 @@ You can then see the fan on your Bond Home app.
 You can also start a livelog:
 
 ```bash
-bond livelog --info
+bond livelog --level info
 ```
 
 ## Getting Help
