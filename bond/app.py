@@ -1,6 +1,5 @@
 import bond.cli
 import sys
-import bond.database
 
 COMMANDS = [
     "discover",
@@ -12,10 +11,11 @@ COMMANDS = [
     "device_create",
     "livelog",
     "signal",
+    "reset",
+    "wifi",
 ]
 
 
 def run():
-    bond.database.load()
     bond.cli.load_commands(COMMANDS)
     bond.cli.execute_from_command_line(sys.argv)

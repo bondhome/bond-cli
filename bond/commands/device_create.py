@@ -1,5 +1,5 @@
 from .base_command import BaseCommand
-import bond.database
+from bond.database import BondDatabase
 import bond.proto
 from .devices import DevicesCommand
 
@@ -31,7 +31,7 @@ class DeviceCreateCommand(BaseCommand):
     ]
 
     def run(self, args):
-        bondid = bond.database.get_assert_selected_bondid()
+        bondid = BondDatabase.get_assert_selected_bondid()
         rsp = bond.proto.post(
             bondid,
             topic="devices",

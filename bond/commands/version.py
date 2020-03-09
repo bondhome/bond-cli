@@ -1,7 +1,6 @@
 from .base_command import BaseCommand
 from bond.cli.table import Table
 import time
-import bond.database
 from bond.proto import get_all_async
 
 

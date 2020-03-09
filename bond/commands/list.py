@@ -1,5 +1,5 @@
 from .base_command import BaseCommand
-import bond.database
+from bond.database import BondDatabase
 from bond.cli.table import Table
 
 
@@ -9,7 +9,7 @@ class ListCommand(BaseCommand):
 
     def run(self, args):
         table = Table(["bondid", "ip", "token"])
-        bonds = bond.database.get_bonds()
+        bonds = BondDatabase.get_bonds()
         for bondid in bonds.keys():
             b = bonds[bondid]
             table.add_row(

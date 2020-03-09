@@ -1,5 +1,5 @@
 from .base_command import BaseCommand
-import bond.database
+from bond.database import BondDatabase
 import bond.proto
 
 
@@ -33,7 +33,7 @@ class SignalCommand(BaseCommand):
     ]
 
     def run(self, args):
-        bondid = bond.database.get_assert_selected_bondid()
+        bondid = BondDatabase.get_assert_selected_bondid()
         rsp = bond.proto.put(
             bondid,
             topic="signal/tx",
