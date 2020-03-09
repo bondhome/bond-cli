@@ -1,17 +1,17 @@
-import bond.database
+from bond.database import BondDatabase
 from bond.proto.http import HTTP_Transport
 
 
 def get_bonds():
-    selected_bondid = bond.database.get("selected_bondid")
+    selected_bondid = BondDatabase.get("selected_bondid")
     if not selected_bondid:
-        return bond.database.get_bonds().keys()
+        return BondDatabase.get_bonds().keys()
     else:
         return [selected_bondid]
 
 
 def mk_transport(bondid):
-    b = bond.database.get_bonds()[bondid]
+    b = BondDatabase.get_bonds()[bondid]
     return HTTP_Transport(
         bondid=bondid,
         hostname=b["ip"],
@@ -55,4 +55,4 @@ def get_async(bondid, **kwargs):
 
 
 def get_all_async(**kwargs):
-    return [get_async(bondid, **kwargs) for bondid in get_bonds()]
+    return [get_async(bondid, **kwargs) for bondid in BondDatabase.get_bonds()]

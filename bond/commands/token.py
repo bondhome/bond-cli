@@ -1,16 +1,16 @@
 from .base_command import BaseCommand
-import bond.database
+from bond.database import BondDatabase
 from bond.cli.console import LogLine
 
 
 def update_token(token):
-    bondid = bond.database.get_assert_selected_bondid()
-    bonds = bond.database.get_bonds()
+    bondid = BondDatabase.get_assert_selected_bondid()
+    bonds = BondDatabase.get_bonds()
     if bondid not in bonds.keys():
         bonds[bondid] = dict()
     bonds[bondid]["token"] = token
     print(f"Updated token for {bondid}")
-    bond.database.set("bonds", bonds)
+    BondDatabase.set("bonds", bonds)
 
 
 class TokenCommand(BaseCommand):

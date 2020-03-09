@@ -1,5 +1,5 @@
 from .base_command import BaseCommand
-import bond.database
+from bond.database import BondDatabase
 import bond.proto
 from .devices import DevicesCommand
 import datetime
@@ -50,7 +50,7 @@ class LivelogCommand(BaseCommand):
     ]
 
     def run(self, args):
-        bondid = bond.database.get_assert_selected_bondid()
+        bondid = BondDatabase.get_assert_selected_bondid()
 
         log_fn = bondid + ".livelog"
 
@@ -65,7 +65,7 @@ class LivelogCommand(BaseCommand):
 
         if args.ip is None:
             with open(log_fn, "w+") as log:
-                my_ip = get_my_ip(bond.database.get_bonds()[bondid]["ip"])
+                my_ip = get_my_ip(BondDatabase.get_bonds()[bondid]["ip"])
                 sock, UDP_PORT = listen(my_ip)
                 do_livelog(bondid, my_ip, UDP_PORT)
                 log.write("\n===== %s =====\n" % datetime.datetime.now())
