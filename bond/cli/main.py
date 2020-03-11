@@ -19,8 +19,8 @@ def register(command):
     parser_a = _subparsers.add_parser(name, help=help)
     parser_a.set_defaults(func=command.run)
     if hasattr(command, "arguments"):
-        for argument in command.arguments:
-            parser_a.add_argument(*argument[0], **argument[1])
+        for arg, config in command.arguments.items():
+            parser_a.add_argument(arg, **config)
 
 
 def execute_from_command_line(argv):

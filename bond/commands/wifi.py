@@ -7,16 +7,13 @@ from base64 import b64encode
 class WifiCommand(BaseCommand):
     subcmd = "wifi"
     help = "Connect to WiFi"
-    arguments = [
-        (
-            ["--ssid"],
-            {
-                "help": "The SSID (name) of the WiFi access point to connect to",
-                "required": True,
-            },
-        ),
-        (["--password"], {"help": "The password", "required": True}),
-    ]
+    arguments = {
+        "--ssid": {
+            "help": "The SSID (name) of the WiFi access point to connect to",
+            "required": True,
+        },
+        "--password": {"help": "The password", "required": True},
+    }
 
     def run(self, args):
         bondid = BondDatabase.get_assert_selected_bondid()
