@@ -12,7 +12,11 @@ def register():
 
 
 def get_branch(args, target):
-    return f"{args.release}-{target}" if args.release else args.branch.replace("/", "-")
+    release = args.release
+    if release:
+        return "trunk" if release == "trunk" else f"{release}-{target}"
+    else:
+        return args.branch.replace("/", "-")
 
 
 def get_latest_version(target, branch):
@@ -77,10 +81,10 @@ class UpgradeCommand(BaseCommand):
     help = "Upgrade your Bond. Choose either a released firmware or a firmware from a specific branch"
     arguments = {
         "--release": {
-            "help": """the release to use. Using alpha is not recommended unless
+            "help": """the release to use. Using trunk or alpha is not recommended unless
                        you really know what you're doing, master is the branch released to
                        the store mobile apps, beta is released to the public beta mobile apps""",
-            "choices": ["alpha", "beta", "master"],
+            "choices": ["trunk", "alpha", "beta", "master"],
         },
         "--target": {
             "help": "override detected target, really not recommended unless you absolutely know what you're doing!"
