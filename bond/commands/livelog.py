@@ -58,12 +58,14 @@ class LivelogCommand(BaseCommand):
             "help": "set the verbosity for the given subsys: warn, info, debug, or trace",
             "choices": LEVEL_MAP.keys(),
         },
+        "--out": {
+            "help": "a filename to write the logs to",
+            "default": os.devnull,
+        }
     }
 
     def run(self, args):
         bondid = BondDatabase.get_assert_selected_bondid()
-
-        log_fn = bondid + ".livelog"
 
         if args.level:
             bond.proto.patch(
@@ -76,7 +78,7 @@ class LivelogCommand(BaseCommand):
             bond.proto.patch(bondid, topic="debug/syslog", body=body)
 
         if args.ip is None:
-            with open(log_fn, "w+") as log:
+            with open(args.out, "w+") as log:
                 my_ip = get_my_ip(BondDatabase.get_bonds()[bondid]["ip"])
                 sock, UDP_PORT = listen(my_ip)
                 do_livelog(bondid, my_ip, UDP_PORT)
