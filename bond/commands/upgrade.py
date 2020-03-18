@@ -83,7 +83,7 @@ class UpgradeCommand(BaseCommand):
             "choices": ["alpha", "beta", "master"],
         },
         "--target": {
-            "help": "override detected target, really not recommended unless you absolutely know what you're doing!"
+            "help": "override detected target. Useful in development, but may cause irreversible device malfunction!"
         },
         "--branch": {
             "help": "choose a specific firmware branch, same deal as alpha: don't use unless you know what you're doing."
@@ -105,7 +105,7 @@ class UpgradeCommand(BaseCommand):
             if args.target != target:
                 print("Detected and requested targets do not match!")
                 print(
-                    "WARNING: Continuing may cause brain and/or hardware damage, and fire."
+                    "WARNING: Continuing may cause irreversible device damage or even a fire hazard."
                 )
                 response = input(
                     "Are you sure you know EXACTLY what you're doing? [N/yessir] "
