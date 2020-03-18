@@ -7,6 +7,7 @@ import socket
 import random
 import time
 import sys
+import os
 
 LEVEL_MAP = {"warn": 2, "info": 3, "debug": 4, "trace": 5}
 
