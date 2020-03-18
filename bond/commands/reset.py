@@ -5,19 +5,18 @@ import bond.proto
 
 class ResetCommand(BaseCommand):
     subcmd = "reset"
-    help = """Reset a Bond, either to set it back up (setup reset), clear its database 
-              completely (factory reset), or clear its database and reset it to
-              its original firmware (rescue reset, which is NOT RECOMMENDED UNLESS
-              YOU KNOW WHAT YOU'RE DOING!)"""
+    help = """Reset a Bond to set it up again on WiFi, clear its database, or
+              reset its firmware to a rescue image"""
     arguments = {
         "type": {
             "help": """setup: clear the WiFi database record, making the Bond
-                        disconnect from WiFi and allowing it to be set up again
-                        factory: clear the Bond's entire database
-                        rescue: clear the Bond's entire database and reset its firmware
-                        to factory settings (this is NOT RECOMMENDED unless you really
-                        know what you're doing! You probably don't need this unless
-                        you're developing firmware for the Bond)""",
+                       disconnect from WiFi and allowing it to be set up again\n
+                       factory: clear the Bond's entire database\n
+                       rescue: clear the Bond's entire database and restore the original
+                       firmware version that the unit shipped with. 
+                       This is NOT RECOMMENDED unless you really
+                       know what you're doing! You probably don't need this unless
+                       you're developing firmware for the Bond.""",
             "choices": ["setup", "factory", "rescue"],
         }
     }
