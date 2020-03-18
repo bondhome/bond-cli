@@ -13,6 +13,7 @@ COMMANDS = [
     "signal",
     "reset",
     "wifi",
+    "upgrade",
 ]
 
 

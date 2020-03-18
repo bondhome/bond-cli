@@ -16,7 +16,7 @@ def update_token(token):
 class TokenCommand(BaseCommand):
     subcmd = "token"
     help = "Manage token-based authentication."
-    arguments = [(["TOKEN"], {"help": "Save Bond token to local database"})]
+    arguments = {"TOKEN": {"help": "Save Bond token to local database"}}
 
     def run(self, args):
         update_token(args["Token"])

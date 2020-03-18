@@ -61,6 +61,14 @@ You can also start a livelog:
 bond livelog --level info
 ```
 
+## Upgrade Your Bond
+
+You can upgrade your selected bond:
+
+```bash
+bond upgrade --release beta
+```
+
 ## Getting Help
 
 Get more help with:

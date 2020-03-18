@@ -33,33 +33,32 @@ def listen(my_ip):
     sock.bind((UDP_IP, UDP_PORT))
     return sock, UDP_PORT
 
+
 def auto_int(string: str) -> int:
     """Attempts to automatically detect the base of the input string and parse it as
        an int"""
     return int(string, 0)
 
+
 class LivelogCommand(BaseCommand):
     subcmd = "livelog"
     help = "Start streaming logs"
-    arguments = [
-        (["--ip"], {"help": "IP of log server"}),
-        (["--port"], {"help": "UDP port of log server"}),
-        (
-            ["--level"],
-            {
-                "help": "set the verbosity: warn, info, debug (may slow the Bond), or trace (will make the bond unuseably slow, it's recommended to only use this in subys-level)",
-                "choices": LEVEL_MAP.keys(),
-            },
-        ),
-        (["--subsys"], {"help": "the subsys target to change the log level for", "type": auto_int}),
-        (
-            ["--subsys-level"],
-            {
-                "help": "set the verbosity for the given subsys: warn, info, debug, or trace",
-                "choices": LEVEL_MAP.keys(),
-            },
-        ),
-    ]
+    arguments = {
+        "--ip": {"help": "IP of log server"},
+        "--port": {"help": "UDP port of log server"},
+        "--level": {
+            "help": "set the verbosity: warn, info, debug (may slow the Bond), or trace (will make the bond unuseably slow, it's recommended to only use this in subys-level)",
+            "choices": LEVEL_MAP.keys(),
+        },
+        "--subsys": {
+            "help": "the subsys target to change the log level for",
+            "type": auto_int,
+        },
+        "--subsys-level": {
+            "help": "set the verbosity for the given subsys: warn, info, debug, or trace",
+            "choices": LEVEL_MAP.keys(),
+        },
+    }
 
     def run(self, args):
         bondid = BondDatabase.get_assert_selected_bondid()
@@ -74,10 +73,7 @@ class LivelogCommand(BaseCommand):
             body = {"subsys": args.subsys}
             if args.subsys_level:
                 body["lvl"] = LEVEL_MAP[args.subsys_level]
-            bond.proto.patch(
-                bondid, topic="debug/syslog", body=body,
-            )
-
+            bond.proto.patch(bondid, topic="debug/syslog", body=body)
 
         if args.ip is None:
             with open(log_fn, "w+") as log:
