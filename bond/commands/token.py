@@ -8,18 +8,18 @@ def update_token(token):
     bonds = BondDatabase.get_bonds()
     if bondid not in bonds.keys():
         bonds[bondid] = dict()
-    bonds[bondid]["token"] = token
-    print(f"Updated token for {bondid}")
+    bonds.get(bondid, {})["token"] = token
+    print("Updated token for %s" % bondid)
     BondDatabase.set("bonds", bonds)
 
 
 class TokenCommand(BaseCommand):
     subcmd = "token"
     help = "Manage token-based authentication."
-    arguments = {"TOKEN": {"help": "Save Bond token to local database"}}
+    arguments = {"token": {"help": "Save Bond token to local database"}}
 
     def run(self, args):
-        update_token(args["Token"])
+        update_token(args.token)
 
 
 def register():
