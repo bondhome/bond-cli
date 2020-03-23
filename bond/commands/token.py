@@ -10,7 +10,7 @@ def update_token(token, bond_id=None):
     if bond_id not in bonds.keys():
         bonds[bond_id] = dict()
     bonds[bond_id]["token"] = token
-    print(f"Updated token for {bond_id}")
+    print("Updated token for %s" % bondid)
     BondDatabase.set("bonds", bonds)
 
 
@@ -38,7 +38,6 @@ class TokenCommand(BaseCommand):
             update_token(args.token)
         else:
             check_unlocked_token()
-
 
 def register():
     TokenCommand()
