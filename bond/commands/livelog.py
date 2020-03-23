@@ -59,10 +59,7 @@ class LivelogCommand(BaseCommand):
             "help": "set the verbosity for the given subsys: warn, info, debug, or trace",
             "choices": LEVEL_MAP.keys(),
         },
-        "--out": {
-            "help": "a filename to write the logs to",
-            "default": os.devnull,
-        }
+        "--out": {"help": "a filename to write the logs to", "default": os.devnull},
     }
 
     def run(self, args):
