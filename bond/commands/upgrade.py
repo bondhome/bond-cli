@@ -41,13 +41,17 @@ def do_upgrade(bondid, version_obj):
         pass
     for _ in range(120):
         time.sleep(1)
-        rsp = bond.proto.get(bondid, topic="sys/upgrade")
-        progress = rsp["b"]["progress"]
-        assert rsp["s"] in (200, 204)
-        if rsp["s"] == 204 or progress == 1000:
-            print("Upgrade installed.")
-            break
-        print(f"Progress: {progress / 10}%")
+        try:
+            rsp = bond.proto.get(bondid, topic="sys/upgrade")
+            progress = rsp["b"]["progress"]
+            print(f"Progress: {progress / 10}%")
+            if rsp["s"] == 204 or progress == 1000:
+                print("Upgrade installed.")
+                break
+        except:
+            sys.stdout.write(".")
+            sys.stdout.flush()
+            pass
     else:
         raise Exception("Download timeout")
     print("Rebooting...")
@@ -61,14 +65,11 @@ def do_upgrade(bondid, version_obj):
         # check for in progress return get on upgrade
         try:
             rsp = bond.proto.get(bondid, topic="sys/version", timeout=2)
+            print("Reconnected!")
+            break
         except:
             sys.stdout.write(".")
             sys.stdout.flush()
-            rsp = None
-
-        if rsp:
-            print("Reconnected!")
-            break
     else:
         raise Exception("Download timeout")
 
