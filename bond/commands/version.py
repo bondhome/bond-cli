@@ -7,7 +7,7 @@ from bond.database import BondDatabase
 
 class VersionCommand(BaseCommand):
     subcmd = "version"
-    help = "Get firmware version and target."
+    help = "Get firmware version and target of the selected Bond."
 
     def run(self, args):
         bond_id = BondDatabase.get_assert_selected_bondid()
