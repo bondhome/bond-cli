@@ -43,7 +43,7 @@ class SelectCommand(BaseCommand):
             if len(matches) == 1:
                 bond_id = matches[0]
             if len(matches) > 1:
-                print("Found multiple possibilities:")
+                print("Ambiguous Bond ID prefix. Potential matches:")
                 for match in matches:
                     print(match)
                 exit(1)
