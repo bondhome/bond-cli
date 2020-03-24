@@ -55,7 +55,9 @@ class SelectCommand(BaseCommand):
                 BondDatabase.set_bond(bond_id, "port", args.port)
                 print("Set %s port %s" % (bond_id, args.ip))
             print("Selected Bond: %s" % BondDatabase().get("selected_bondid"))
-            check_unlocked_token()
+            token = check_unlocked_token()
+            if token:
+                print("Set token: %s" % token)
         elif args.clear:
             BondDatabase.pop("selected_bondid", None)
             print("Cleared selected Bond")

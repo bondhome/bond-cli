@@ -1,6 +1,5 @@
 from .base_command import BaseCommand
 from bond.database import BondDatabase
-from bond.cli.console import LogLine
 import bond.proto
 
 
@@ -19,18 +18,8 @@ def check_unlocked_token(bond_id=None):
     rsp = bond.proto.get(bond_id, topic="token")
     token = rsp.get("b", {}).get("token")
     if token:
-        print("%s's token is unlocked, updating..." % bond_id)
         update_token(token, bond_id)
-    else:
-        print("%s's token is not unlocked." % bond_id)
-        stored_token = BondDatabase.get_bond(bond_id).get('token')
-        if stored_token:
-            print("There's already one token in your local database: %s." % stored_token)
-            print("If this token is obsolete, you will need to set the new token.")
-        print(
-            "You can set it manually with 'bond token <token>', or unlock the token and run 'bond token'"
-        )
-        print("(tip: the token is unlocked for a short period after a reboot)")
+    return token is not None
 
 
 class TokenCommand(BaseCommand):
@@ -39,10 +28,22 @@ class TokenCommand(BaseCommand):
     arguments = {"token": {"help": "Save Bond token to local database", "nargs": "?"}}
 
     def run(self, args):
+        bond_id = BondDatabase.get_assert_selected_bondid()
         if args.token:
-            update_token(args.token)
-        else:
-            check_unlocked_token()
+            update_token(args.token, bond_id)
+        elif not check_unlocked_token(bond_id):
+            print("%s's token is not unlocked." % bond_id)
+            stored_token = BondDatabase.get_bond(bond_id).get("token")
+            if stored_token:
+                print(
+                    "There's already a token for %s in your local database: %s."
+                    % (bond_id, stored_token)
+                )
+                print("If this token is obsolete, you will need to set the new token.")
+                print(
+                    "You can set it manually with 'bond token <token>', or unlock the token and run 'bond token'"
+                )
+                print("(tip: the token is unlocked for a short period after a reboot)")
 
 
 def register():
