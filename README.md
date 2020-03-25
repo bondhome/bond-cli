@@ -2,7 +2,7 @@
 
 # Bond Command Line Interface
 
-EDIT: This project is in a beta state. We released it on the principle of release early & often. It is here just in case it benefits a member of the Bond Home community. Your mileage may vary! Bug reports and feature requests are strongly encouraged, just open an issue!
+EDIT: This project is in a beta state. We released it on the principle of release early & often. It is here just in case it benefits a member of the Bond Home community. Your mileage may vary!
 
 ## Purpose
 
@@ -76,3 +76,23 @@ Get more help with:
 ```bash
 bond -h
 ```
+
+or you can get help with any subcommand
+```bash
+bond select -h
+```
+
+## Contributing
+
+Bug reports and feature requests in the form of issues and pull requests are strongly encouraged!
+
+To develop locally, you can clone the repository from github, remove the package if already present, then install it to pip in local editable mode:
+
+```bash
+git clone git@github.com:bondhome/bond-cli.git
+cd bond-cli
+pip uninstall bond-cli
+pip install -e "."
+```
+
+Now all changes made in your local copy of `bond-cli` will be reflected in the `bond` executable.
