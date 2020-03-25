@@ -18,6 +18,7 @@ def get_branch(args, target):
     else:
         return args.branch.replace("/", "-")
 
+
 def get_latest_version(target, branch):
     url = f"https://s3.amazonaws.com/bond-updates/v2/{target}/{branch}/versions_internal.json"
     rsp = requests.get(url)
