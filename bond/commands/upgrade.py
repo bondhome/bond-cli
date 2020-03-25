@@ -11,21 +11,21 @@ def register():
     UpgradeCommand()
 
 
-def get_branch(args, target):
-    release = args.release
-    if release:
-        return "trunk" if release == "trunk" else f"{release}-{target}"
+def get_branch_string(branch, target):
+    if branch in ("alpha", "beta", "master"):
+        return f"{branch}-{target}"
+    elif branch == "trunk":
+        return "trunk"
     else:
-        return args.branch.replace("/", "-")
+        return branch.replace("/", "-")
 
 
 def get_latest_version(target, branch):
     url = f"https://s3.amazonaws.com/bond-updates/v2/{target}/{branch}/versions_internal.json"
     rsp = requests.get(url)
     if rsp.status_code != 200:
-        raise Exception(
-            f"Failed to access version info on S3: {url}, {rsp.status_code}"
-        )
+        print("Failed to find an upgrade for target %s on branch %s" % (target, branch))
+        exit(1)
     return json.loads(rsp.content)["versions"][0]
 
 
@@ -81,25 +81,18 @@ class UpgradeCommand(BaseCommand):
     subcmd = "upgrade"
     help = "Upgrade your Bond. Choose either a released firmware or a firmware from a specific branch"
     arguments = {
-        "--release": {
-            "help": """the release to use. Using trunk or alpha is not recommended unless
-                       you really know what you're doing, master is the branch released to
-                       the store mobile apps, beta is released to the public beta mobile apps""",
-            "choices": ["trunk", "alpha", "beta", "master"],
+        "branch": {
+            "help": "The branch. Release branches are 'trunk', 'alpha', 'beta', and 'master'. "
+            "'master' is the version distributed by the mobile apps in the app stores, "
+            "'alpha' and 'trunk' are for internal development use, and may be unstable."
         },
         "--target": {
             "help": "override detected target. Useful in development, but may cause irreversible device malfunction!"
-        },
-        "--branch": {
-            "help": "choose a specific firmware branch, same deal as alpha: don't use unless you know what you're doing."
         },
     }
 
     def run(self, args):
         bondid = BondDatabase.get_assert_selected_bondid()
-        if (args.release and args.branch) or not (args.release or args.branch):
-            print("Unable to proceed: choose one and only one of release or branch")
-            exit(1)
         print("Connecting to BOND...")
         sys_version = bond.proto.get(bondid, topic="sys/version")["b"]
         target = sys_version["target"]
@@ -124,7 +117,7 @@ class UpgradeCommand(BaseCommand):
                 target = args.target
                 print("Target manually overriden.")
 
-        branch = get_branch(args, target)
+        branch = get_branch_string(args.branch, target)
         print(f"Selected Branch: \t{branch}")
         print(f"Current Version: \t{current_ver}")
         version_obj = get_latest_version(target, branch)
