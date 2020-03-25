@@ -44,15 +44,15 @@ def do_upgrade(bondid, version_obj):
         time.sleep(1)
         try:
             rsp = bond.proto.get(bondid, topic="sys/upgrade")
-            progress = rsp["b"]["progress"]
-            print(f"Progress: {progress / 10}%")
-            if rsp["s"] == 204 or progress == 1000:
-                print("Upgrade installed.")
-                break
-        except:
+        except requests.exceptions.ReadTimeout:
             sys.stdout.write(".")
             sys.stdout.flush()
-            pass
+            continue
+        progress = rsp["b"]["progress"]
+        print(f"Progress: {progress / 10}%")
+        if rsp["s"] == 204 or progress == 1000:
+            print("Upgrade installed.")
+            break
     else:
         raise Exception("Download timeout")
     print("Rebooting...")
