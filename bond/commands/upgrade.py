@@ -66,11 +66,12 @@ def do_upgrade(bondid, version_obj):
         # check for in progress return get on upgrade
         try:
             rsp = bond.proto.get(bondid, topic="sys/version", timeout=2)
-            print("Reconnected!")
-            break
-        except:
+        except requests.exceptions.ConnectTimeout:
             sys.stdout.write(".")
             sys.stdout.flush()
+            continue
+        print("Reconnected!")
+        break
     else:
         raise Exception("Download timeout")
 
