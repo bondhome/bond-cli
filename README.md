@@ -66,7 +66,7 @@ bond livelog --level info
 You can upgrade your selected bond:
 
 ```bash
-bond upgrade --release beta
+bond upgrade beta
 ```
 
 ## Getting Help
