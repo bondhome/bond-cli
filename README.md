@@ -88,7 +88,7 @@ Bug reports and feature requests in the form of issues and pull requests are str
 
 To develop locally, you can clone the repository from github, remove the package if already present, then install it to pip in local editable mode:
 
-```
+```bash
 git clone git@github.com:bondhome/bond-cli.git
 cd bond-cli
 pip uninstall bond-cli
