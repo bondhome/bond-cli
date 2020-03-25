@@ -3,7 +3,7 @@ from bond.proto.http import HTTP_Transport
 
 
 def get_bonds():
-    selected_bondid = BondDatabase.get("selected_bondid")
+    selected_bondid = BondDatabase().get("selected_bondid")
     if not selected_bondid:
         return BondDatabase.get_bonds().keys()
     else:

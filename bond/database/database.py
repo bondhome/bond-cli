@@ -46,6 +46,7 @@ class BondDatabase(MutableMapping):
     def __delitem__(self, key):
         with self.lock:
             del self.db[key]
+            self.__save()
 
     def __iter__(self):
         return self.db.__iter__()
@@ -57,9 +58,10 @@ class BondDatabase(MutableMapping):
 
     @staticmethod
     def get_assert_selected_bondid():
-        selected_bondid = BondDatabase.get("selected_bondid")
+        selected_bondid = BondDatabase().get("selected_bondid")
         if selected_bondid is None:
-            raise Exception("No Bond selected. Use 'bond select' first.")
+            print("No Bond selected. Use 'bond select' first.")
+            exit(1)
         return selected_bondid
 
     @staticmethod
@@ -68,7 +70,7 @@ class BondDatabase(MutableMapping):
 
     @staticmethod
     def get_bond(bondid):
-        return BondDatabase().get(bondid, dict())
+        return BondDatabase().get_bonds().get(bondid, dict())
 
     @staticmethod
     def set_bond(bondid, key, value):
@@ -76,11 +78,7 @@ class BondDatabase(MutableMapping):
         bonds.setdefault(bondid, dict())
         bonds[bondid][key] = value
         BondDatabase.set("bonds", bonds)
-
-    @staticmethod
-    def get(key):
-        return BondDatabase()[key]
-
+    
     @staticmethod
     def set(key, value):
         BondDatabase()[key] = value

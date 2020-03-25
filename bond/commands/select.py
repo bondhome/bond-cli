@@ -1,46 +1,66 @@
 from .base_command import BaseCommand
-from .token import update_token
+from .token import check_unlocked_token
 from bond.database import BondDatabase
 from ..cli.console import LogLine
-from bond.proto import get_async
-
-
-def update_token_callback(bondid, rsp):
-    token = rsp.get("b", {}).get("token")
-    if token:
-        print(f"{bondid}'s token is unlocked, updating...")
-        update_token(token)
 
 
 class SelectCommand(BaseCommand):
     subcmd = "select"
-    help = "Select a single Bond to interact with. If the token of this Bond is unlocked, it will be set. (The easiest way to unlock a token is with a power cycle)"
+    help = """Select a single Bond to interact with,
+              If the token of this Bond is unlocked, it will be set.
+              (The easiest way to unlock a token is with a power cycle)"""
     arguments = {
-        "BONDID": {
+        "bond_id": {
             "nargs": "?",
-            "help": "Bond ID to interact with in subsequent commands",
+            "help": """Bond ID to interact with in subsequent commands
+                       (you can also use a prefix, if it uniquely identifies an
+                       already-discovered Bond""",
         },
-        "--none": {"action": "store_true", "help": "clear selection"},
+        "--clear": {"action": "store_true", "help": "clear selection"},
         "--ip": {"help": "specify Bond IP address"},
         "--port": {"help": "specify Bond HTTP port"},
     }
 
     def run(self, args):
-        if args.BONDID:
-            BondDatabase.set("selected_bondid", args.BONDID)
+        if args.bond_id:
+            matches = [
+                bond
+                for bond in BondDatabase.get_bonds()
+                if bond.startswith(args.bond_id)
+            ]
+            if len(matches) == 0:
+                proceed = input(
+                    "%s hasn't been discovered by bond-cli ('bond discover'). Proceed with setting it? It may not be reachable. y/N"
+                    % args.bond_id
+                )
+                if proceed.lower() == "y":
+                    bond_id = args.bond_id
+                else:
+                    print(
+                        "Aborting. Try 'bond discover' on the same network as your Bond"
+                    )
+                    exit(1)
+            if len(matches) == 1:
+                bond_id = matches[0]
+            if len(matches) > 1:
+                print("Ambiguous Bond ID prefix. Potential matches:")
+                for match in matches:
+                    print(match)
+                exit(1)
+            BondDatabase.set("selected_bondid", bond_id)
             if args.ip:
-                BondDatabase.set_bond(args.BONDID, "ip", args.ip)
-                LogLine("Set %s IP %s" % (args.BONDID, args.ip))
+                BondDatabase.set_bond(bond_id, "ip", args.ip)
+                print("Set %s IP %s" % (bond_id, args.ip))
             if args.port:
-                BondDatabase.set_bond(args.BONDID, "port", args.port)
-                LogLine("Set %s port %s" % (args.BONDID, args.ip))
-            threads = get_async(
-                args.BONDID, topic="token", on_success=update_token_callback
-            )
-
-        if args.none:
-            BondDatabase.set("selected_bondid", None)
-        LogLine("Selected Bond: %s" % BondDatabase.get("selected_bondid"))
+                BondDatabase.set_bond(bond_id, "port", args.port)
+                print("Set %s port %s" % (bond_id, args.ip))
+            print("Selected Bond: %s" % BondDatabase().get("selected_bondid"))
+            token = check_unlocked_token()
+            if token:
+                print("Set token: %s" % token)
+        elif args.clear:
+            BondDatabase.pop("selected_bondid", None)
+            print("Cleared selected Bond")
 
 
 def register():

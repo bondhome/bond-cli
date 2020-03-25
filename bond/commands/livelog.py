@@ -59,10 +59,7 @@ class LivelogCommand(BaseCommand):
             "help": "set the verbosity for the given subsys: warn, info, debug, or trace",
             "choices": LEVEL_MAP.keys(),
         },
-        "--out": {
-            "help": "a filename to write the logs to",
-            "default": os.devnull,
-        }
+        "--out": {"help": "a filename to write the logs to", "default": os.devnull},
     }
 
     def run(self, args):
@@ -78,20 +75,20 @@ class LivelogCommand(BaseCommand):
                 body["lvl"] = LEVEL_MAP[args.subsys_level]
             bond.proto.patch(bondid, topic="debug/syslog", body=body)
 
-        if args.ip is None:
-            with open(args.out, "w+") as log:
-                my_ip = get_my_ip(BondDatabase.get_bonds()[bondid]["ip"])
-                sock, UDP_PORT = listen(my_ip)
-                do_livelog(bondid, my_ip, UDP_PORT)
-                log.write("\n===== %s =====\n" % datetime.datetime.now())
-                while True:
-                    data, addr = sock.recvfrom(1024 * 16)
-                    logline = data.decode("utf-8")
-                    sys.stdout.write(logline)
-                    log.write(logline)
-                    log.flush()
-        else:
+        if args.ip:
             do_livelog(bond, args.ip, int(args.port))
+        else:
+            my_ip = get_my_ip(BondDatabase.get_bonds()[bondid]["ip"])
+            sock, UDP_PORT = listen(my_ip)
+            do_livelog(bondid, my_ip, UDP_PORT)
+        with open(args.out, "w+") as log:
+            log.write("\n===== %s =====\n" % datetime.datetime.now())
+            while True:
+                data, addr = sock.recvfrom(1024 * 16)
+                logline = data.decode("utf-8")
+                sys.stdout.write(logline)
+                log.write(logline)
+                log.flush()
 
 
 def register():

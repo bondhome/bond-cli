@@ -14,6 +14,7 @@ COMMANDS = [
     "reset",
     "wifi",
     "upgrade",
+    "rfman",
 ]
 
 
