@@ -11,7 +11,10 @@ class DiscoverCommand(BaseCommand):
     def run(self, args):
         table = Table(["bondid", "ip", "port"])
         scanner = Scanner(table.add_row)
-        time.sleep(5)
+        try:
+            time.sleep(5)
+        except KeyboardInterrupt:
+            pass
 
 
 def register():
