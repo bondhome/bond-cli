@@ -44,7 +44,7 @@ def do_upgrade(bondid, version_obj):
         time.sleep(1)
         try:
             rsp = bond.proto.get(bondid, topic="sys/upgrade")
-        except requests.exceptions.ReadTimeout:
+        except requests.RequestException:
             sys.stdout.write(".")
             sys.stdout.flush()
             continue
@@ -66,7 +66,7 @@ def do_upgrade(bondid, version_obj):
         # check for in progress return get on upgrade
         try:
             rsp = bond.proto.get(bondid, topic="sys/version", timeout=2)
-        except requests.exceptions.ConnectTimeout:
+        except requests.RequestException:
             sys.stdout.write(".")
             sys.stdout.flush()
             continue
