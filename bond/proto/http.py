@@ -48,6 +48,5 @@ class HTTP_Transport(BaseTransport):
         except:
             body = None
         if rsp.status_code == 401:
-            print("Invalid token! Have you set it with 'bond token' yet?")
-            exit(1)
+            raise SystemExit("Invalid token! Have you set it with 'bond token' yet?")
         return {"s": rsp.status_code, "b": body, "bondid": self.bondid}
