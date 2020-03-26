@@ -57,7 +57,7 @@ class SelectCommand(BaseCommand):
             print("Selected Bond: %s" % BondDatabase().get("selected_bondid"))
             token = check_unlocked_token()
         elif args.clear:
-            BondDatabase.pop("selected_bondid", None)
+            BondDatabase().pop("selected_bondid", None)
             print("Cleared selected Bond")
 
 

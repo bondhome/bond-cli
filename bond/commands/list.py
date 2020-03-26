@@ -10,7 +10,7 @@ class ListCommand(BaseCommand):
 
     def run(self, args):
         if args.clear:
-            BondDatabase.pop("bonds", None)
+            BondDatabase().pop("bonds", None)
             print("Cleared discovered Bonds")
         else:
             table = Table(["bondid", "ip", "token"])
