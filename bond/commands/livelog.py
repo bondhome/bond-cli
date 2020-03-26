@@ -84,7 +84,12 @@ class LivelogCommand(BaseCommand):
         with open(args.out, "w+") as log:
             log.write("\n===== %s =====\n" % datetime.datetime.now())
             while True:
-                data, addr = sock.recvfrom(1024 * 16)
+                try:
+                    data, addr = sock.recvfrom(1024 * 16)
+                except KeyboardInterrupt:
+                    if args.out != '/dev/null':
+                        print("Logs written to %s", args.out)
+                    break
                 logline = data.decode("utf-8")
                 sys.stdout.write(logline)
                 log.write(logline)
