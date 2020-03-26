@@ -77,7 +77,7 @@ class BondDatabase(MutableMapping):
         bonds.setdefault(bondid, dict())
         bonds[bondid][key] = value
         BondDatabase.set("bonds", bonds)
-    
+
     @staticmethod
     def set(key, value):
         BondDatabase()[key] = value

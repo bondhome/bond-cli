@@ -24,7 +24,9 @@ def get_latest_version(target, branch):
     url = f"https://s3.amazonaws.com/bond-updates/v2/{target}/{branch}/versions_internal.json"
     rsp = requests.get(url)
     if rsp.status_code != 200:
-        raise SystemExit("Failed to find an upgrade for target %s on branch %s" % (target, branch))
+        raise SystemExit(
+            "Failed to find an upgrade for target %s on branch %s" % (target, branch)
+        )
     return json.loads(rsp.content)["versions"][0]
 
 
