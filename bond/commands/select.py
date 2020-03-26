@@ -36,10 +36,9 @@ class SelectCommand(BaseCommand):
                 if proceed.lower() == "y":
                     bond_id = args.bond_id
                 else:
-                    print(
+                    raise SystemExit(
                         "Aborting. Try 'bond discover' on the same network as your Bond"
                     )
-                    exit(1)
             if len(matches) == 1:
                 bond_id = matches[0]
             if len(matches) > 1:

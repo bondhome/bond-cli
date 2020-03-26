@@ -24,8 +24,9 @@ def get_latest_version(target, branch):
     url = f"https://s3.amazonaws.com/bond-updates/v2/{target}/{branch}/versions_internal.json"
     rsp = requests.get(url)
     if rsp.status_code != 200:
-        print("Failed to find an upgrade for target %s on branch %s" % (target, branch))
-        exit(1)
+        raise SystemExit(
+            "Failed to find an upgrade for target %s on branch %s" % (target, branch)
+        )
     return json.loads(rsp.content)["versions"][0]
 
 
@@ -44,7 +45,7 @@ def do_upgrade(bondid, version_obj):
         time.sleep(1)
         try:
             rsp = bond.proto.get(bondid, topic="sys/upgrade")
-        except requests.exceptions.ReadTimeout:
+        except requests.RequestException:
             sys.stdout.write(".")
             sys.stdout.flush()
             continue
@@ -66,7 +67,7 @@ def do_upgrade(bondid, version_obj):
         # check for in progress return get on upgrade
         try:
             rsp = bond.proto.get(bondid, topic="sys/version", timeout=2)
-        except requests.exceptions.ConnectTimeout:
+        except requests.RequestException:
             sys.stdout.write(".")
             sys.stdout.flush()
             continue
@@ -110,11 +111,9 @@ class UpgradeCommand(BaseCommand):
                     "Are you sure you know EXACTLY what you're doing? [N/yessir] "
                 )
                 if response != "yessir":
-                    print("Yeah, best not to override the target anyways.")
-                    exit(1)
+                    raise SystemExit("Yeah, best not to override the target anyways.")
                 if input("Have your fire extinguisher ready? [N/y]").lower() != "y":
-                    print("Well, go find one!")
-                    exit(1)
+                    raise SystemExit("Well, go find one!")
                 target = args.target
                 print("Target manually overriden.")
 
@@ -127,7 +126,6 @@ class UpgradeCommand(BaseCommand):
         if new_ver == current_ver:
             print("WARNING: Versions are identical.")
         if input("Are you sure? [N/y] ").lower() != "y":
-            print("Pfew. That was close. Aborting!")
-            exit(1)
+            raise SystemExit("Pfew. That was close. Aborting!")
         print("Requesting upgrade...")
         do_upgrade(bondid, version_obj)

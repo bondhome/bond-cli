@@ -60,8 +60,7 @@ class BondDatabase(MutableMapping):
     def get_assert_selected_bondid():
         selected_bondid = BondDatabase().get("selected_bondid")
         if selected_bondid is None:
-            print("No Bond selected. Use 'bond select' first.")
-            exit(1)
+            raise SystemExit("No Bond selected. Use 'bond select' first.")
         return selected_bondid
 
     @staticmethod
@@ -78,7 +77,7 @@ class BondDatabase(MutableMapping):
         bonds.setdefault(bondid, dict())
         bonds[bondid][key] = value
         BondDatabase.set("bonds", bonds)
-    
+
     @staticmethod
     def set(key, value):
         BondDatabase()[key] = value
