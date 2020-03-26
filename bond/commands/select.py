@@ -26,7 +26,7 @@ class SelectCommand(BaseCommand):
             matches = [
                 bond
                 for bond in BondDatabase.get_bonds()
-                if bond.startswith(args.bond_id)
+                if bond.lower().startswith(args.bond_id.lower())
             ]
             if len(matches) == 0:
                 proceed = input(
