@@ -14,7 +14,11 @@ for use by:
 
 ## Installation
 
-Install with `pip install bond-cli`
+Install with
+
+```bash
+pip install bond-cli
+```
 
 ## Getting Started
 
