@@ -24,20 +24,38 @@ Find Bonds on local network:
 bond discover
 ```
 
-Check their firmware versions:
+
+Select a Bond and set the token so we can go deeper:
+
+```bash
+bond select <your Bond's ID or a prefix>
+```
+
+If your Bond's token is unlocked, `select` will retrieve and store it. Otherwise, you have
+a couple options. You can unlock the token yourself (a power cycle is the easiest way, it'll
+be unlocked for a period after a reboot), and run the following to automatically retrieve
+and store it:
+
+```bash
+bond token
+```
+
+Or, you can manually set the token, which you could find in the Bond Home app
+in the Bond's settings screen.
+
+```bash
+bond token <your Bond's token>
+```
+
+Now that you've selected a Bond and stored its token, you're ready to interact with it.
+
+Check its firmware version:
 
 ```bash
 bond version
 ```
 
-Select a Bond and set the token so we can go deeper:
-
-```bash
-bond select KX12345
-bond token a938b2010cb203
-```
-
-List devices:
+List its devices:
 
 ```bash
 bond devices
