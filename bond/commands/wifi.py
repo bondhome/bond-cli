@@ -28,6 +28,23 @@ class WifiCommand(BaseCommand):
         if rsp["s"] > 299:
             print("HTTP %d %s" % (rsp["s"], rsp["b"]["_error_msg"]))
 
+class WifiShutdownCommand(BaseCommand):
+    subcmd = "wifi_shutdown"
+    help = "Shutdown WiFi until reboot (requires fw >= v2.11.4)"
+    arguments = {}
+
+    def run(self, args):
+        bondid = BondDatabase.get_assert_selected_bondid()
+        rsp = bond.proto.patch(
+            bondid,
+            topic="debug/wifi",
+            body={ "shutdown": 1 },
+        )
+        if rsp["s"] > 299:
+            print("HTTP %d %s" % (rsp["s"], rsp["b"]["_error_msg"]))
+
+
 
 def register():
     WifiCommand()
+    WifiShutdownCommand()
