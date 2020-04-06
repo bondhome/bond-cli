@@ -14,6 +14,7 @@ LEVEL_MAP = {"warn": 2, "info": 3, "debug": 4, "trace": 5}
 
 def stop_livelog(bondid):
     bond.proto.delete(bondid, topic="debug/livelog")
+    bond.proto.delete(bondid, topic="debug/syslog")
 
 
 def do_livelog(bondid, ip, port):
@@ -65,7 +66,7 @@ class LivelogCommand(BaseCommand):
         },
         "--out": {"help": "a filename to write the logs to", "default": os.devnull},
         "--delete": { # TODO: refactor to subcommand when possible
-            "help": "stop the bond from logging, improving performance",
+            "help": "stop the bond from logging, and restores its default verbosity, improving performance",
             "action": "store_true",
         },
     }
