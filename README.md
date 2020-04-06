@@ -118,3 +118,16 @@ pip install -e "."
 ```
 
 Now all changes made in your local copy of `bond-cli` will be reflected in the `bond` executable.
+
+## Release Procedure
+
+To make a release, bump the version number in `setup.py` on trunk, then make an annotated tag
+
+```bash
+git tag -a "v1.8.7"
+```
+
+with a version matching that in `setup.py`. You'll be prompted to write some release notes.
+Alternatively, use the Github repository's releases interface to create a release.
+
+Upon pushing the tag or publishing the release, CI will deploy to PyPi.
