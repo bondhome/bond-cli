@@ -78,6 +78,7 @@ class LivelogCommand(BaseCommand):
             stop_livelog(bondid)
             bond.proto.delete(bondid, topic="debug/syslog")
             print("Livelog stopped for %s" % bondid)
+            return
         if args.level:
             bond.proto.patch(
                 bondid, topic="debug/syslog", body={"lvl": LEVEL_MAP[args.level]}
