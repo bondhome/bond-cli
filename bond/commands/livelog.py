@@ -14,7 +14,6 @@ LEVEL_MAP = {"warn": 2, "info": 3, "debug": 4, "trace": 5}
 
 def stop_livelog(bondid):
     bond.proto.delete(bondid, topic="debug/livelog")
-    bond.proto.delete(bondid, topic="debug/syslog")
 
 
 def do_livelog(bondid, ip, port):
@@ -77,6 +76,7 @@ class LivelogCommand(BaseCommand):
         if args.delete:
             bondid = BondDatabase.get_assert_selected_bondid()
             stop_livelog(bondid)
+            bond.proto.delete(bondid, topic="debug/syslog")
             print("Livelog stopped for %s" % bondid)
         if args.level:
             bond.proto.patch(
