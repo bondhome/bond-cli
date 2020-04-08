@@ -8,12 +8,17 @@ import random
 import time
 import sys
 import os
+from requests.exceptions import RequestException
 
 LEVEL_MAP = {"warn": 2, "info": 3, "debug": 4, "trace": 5}
 
 
-def do_livelog(bondid, ip, port):
+def stop_livelog(bondid):
     bond.proto.delete(bondid, topic="debug/livelog")
+
+
+def do_livelog(bondid, ip, port):
+    stop_livelog(bondid)
     time.sleep(0.5)
     bond.proto.put(bondid, topic="debug/livelog", body={"ip": ip, "port": port})
 
@@ -60,11 +65,29 @@ class LivelogCommand(BaseCommand):
             "choices": LEVEL_MAP.keys(),
         },
         "--out": {"help": "a filename to write the logs to", "default": os.devnull},
+        "--delete": { # TODO: refactor to subcommand when possible
+            "help": "stop the bond from logging, and restores its default verbosity, improving performance",
+            "action": "store_true",
+        },
     }
 
     def run(self, args):
         bondid = BondDatabase.get_assert_selected_bondid()
 
+        def tear_down_livelog():
+            try:
+                stop_livelog(bondid)
+                print("Livelog session stopped")
+            except RequestException:
+                pass
+            if args.out != "/dev/null":
+                print("Logs written to %s", args.out)
+
+        if args.delete:
+            stop_livelog(bondid)
+            bond.proto.delete(bondid, topic="debug/syslog")
+            print("Livelog stopped for %s" % bondid)
+            return
         if args.level:
             bond.proto.patch(
                 bondid, topic="debug/syslog", body={"lvl": LEVEL_MAP[args.level]}
@@ -86,14 +109,13 @@ class LivelogCommand(BaseCommand):
             while True:
                 try:
                     data, addr = sock.recvfrom(1024 * 16)
+                    logline = data.decode("utf-8")
+                    sys.stdout.write(logline)
+                    log.write(logline)
+                    log.flush()
                 except KeyboardInterrupt:
-                    if args.out != '/dev/null':
-                        print("Logs written to %s", args.out)
+                    tear_down_livelog()
                     break
-                logline = data.decode("utf-8")
-                sys.stdout.write(logline)
-                log.write(logline)
-                log.flush()
 
 
 def register():
