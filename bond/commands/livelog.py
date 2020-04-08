@@ -8,6 +8,7 @@ import random
 import time
 import sys
 import os
+from requests.exceptions import RequestException
 
 LEVEL_MAP = {"warn": 2, "info": 3, "debug": 4, "trace": 5}
 
@@ -101,6 +102,10 @@ class LivelogCommand(BaseCommand):
                 try:
                     data, addr = sock.recvfrom(1024 * 16)
                 except KeyboardInterrupt:
+                    try:
+                        stop_livelog()
+                    except RequestException:
+                        pass
                     if args.out != "/dev/null":
                         print("Logs written to %s", args.out)
                     break
