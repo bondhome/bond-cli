@@ -74,8 +74,16 @@ class LivelogCommand(BaseCommand):
     def run(self, args):
         bondid = BondDatabase.get_assert_selected_bondid()
 
+        def tear_down_livelog():
+            try:
+                stop_livelog(bondid)
+                print("Livelog session stopped")
+            except RequestException:
+                pass
+            if args.out != "/dev/null":
+                print("Logs written to %s", args.out)
+
         if args.delete:
-            bondid = BondDatabase.get_assert_selected_bondid()
             stop_livelog(bondid)
             bond.proto.delete(bondid, topic="debug/syslog")
             print("Livelog stopped for %s" % bondid)
@@ -101,18 +109,13 @@ class LivelogCommand(BaseCommand):
             while True:
                 try:
                     data, addr = sock.recvfrom(1024 * 16)
+                    logline = data.decode("utf-8")
+                    sys.stdout.write(logline)
+                    log.write(logline)
+                    log.flush()
                 except KeyboardInterrupt:
-                    try:
-                        stop_livelog()
-                    except RequestException:
-                        pass
-                    if args.out != "/dev/null":
-                        print("Logs written to %s", args.out)
+                    tear_down_livelog()
                     break
-                logline = data.decode("utf-8")
-                sys.stdout.write(logline)
-                log.write(logline)
-                log.flush()
 
 
 def register():
