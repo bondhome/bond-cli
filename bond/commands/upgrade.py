@@ -21,7 +21,7 @@ def get_branch_string(branch, target):
 
 
 def get_s3_version(target, branch, depth=0):
-    url = f"https://s3.amazonaws.com/bond-updates/v2/{target}/{branch}/versions_internal.json"
+    url = f"https://bond-updates.s3.amazonaws.com/v2/{target}/{branch}/versions_internal.json"
     rsp = requests.get(url)
     if rsp.status_code != 200:
         raise SystemExit(
