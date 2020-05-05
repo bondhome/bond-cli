@@ -27,8 +27,7 @@ def get_s3_version(target, branch, depth=0):
         raise SystemExit(
             "Failed to find an upgrade for target %s on branch %s" % (target, branch)
         )
-    index = depth or 0
-    return json.loads(rsp.content)["versions"][index]
+    return json.loads(rsp.content)["versions"][depth]
 
 
 def do_upgrade(bondid, version_obj):
@@ -92,8 +91,10 @@ class UpgradeCommand(BaseCommand):
         "--target": {
             "help": "override detected target. Useful in development, but may cause irreversible device malfunction!"
         },
-        "--rollback": {
-            "help": "number of versions to roll back. 0 is the current version, 1 is the one before that and so on."
+        "--release-num": {
+            "help": "number of releases to go back to. 0 is the latest version, 1 is the one before that and so on.",
+            "type": int,
+            "default": 0
         }
     }
 
@@ -124,8 +125,7 @@ class UpgradeCommand(BaseCommand):
         branch = get_branch_string(args.branch, target)
         print(f"Selected Branch: \t{branch}")
         print(f"Current Version: \t{current_ver}")
-        rollback = int(args.rollback) or 0
-        version_obj = get_s3_version(target, branch, rollback)
+        version_obj = get_s3_version(target, branch, args.release_num)
         new_ver = version_obj["version"]
         print(f"Installing Version: \t{new_ver}")
         if new_ver == current_ver:
