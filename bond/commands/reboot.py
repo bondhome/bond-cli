@@ -14,7 +14,7 @@ class RebootCommand(BaseCommand):
         try:
             bond.proto.put(bondid, topic="sys/reboot", body={})
         except requests.exceptions.ReadTimeout:
-            print("Connection timed out, as expected.\nDevice ")
+            print("Connection timed out, as expected.")
 
 def register():
     RebootCommand()
