@@ -20,14 +20,14 @@ def get_branch_string(branch, target):
         return branch.replace("/", "-")
 
 
-def get_latest_version(target, branch):
+def get_s3_version(target, branch, depth=0):
     url = f"https://s3.amazonaws.com/bond-updates/v2/{target}/{branch}/versions_internal.json"
     rsp = requests.get(url)
     if rsp.status_code != 200:
         raise SystemExit(
             "Failed to find an upgrade for target %s on branch %s" % (target, branch)
         )
-    return json.loads(rsp.content)["versions"][0]
+    return json.loads(rsp.content)["versions"][depth]
 
 
 def do_upgrade(bondid, version_obj):
@@ -91,6 +91,11 @@ class UpgradeCommand(BaseCommand):
         "--target": {
             "help": "override detected target. Useful in development, but may cause irreversible device malfunction!"
         },
+        "--age": {
+            "help": "number of releases to go back to. 0 is the latest version, 1 is the one before that and so on.",
+            "type": int,
+            "default": 0
+        }
     }
 
     def run(self, args):
@@ -120,7 +125,7 @@ class UpgradeCommand(BaseCommand):
         branch = get_branch_string(args.branch, target)
         print(f"Selected Branch: \t{branch}")
         print(f"Current Version: \t{current_ver}")
-        version_obj = get_latest_version(target, branch)
+        version_obj = get_s3_version(target, branch, args.age)
         new_ver = version_obj["version"]
         print(f"Installing Version: \t{new_ver}")
         if new_ver == current_ver:
