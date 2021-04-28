@@ -1,8 +1,7 @@
-from .base_command import BaseCommand
-from bond.cli.table import Table
-import time
 import bond.proto
 from bond.database import BondDatabase
+
+from .base_command import BaseCommand
 
 
 class VersionCommand(BaseCommand):

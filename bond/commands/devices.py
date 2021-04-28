@@ -1,9 +1,8 @@
-import time
-
-from .base_command import BaseCommand
+import bond.proto
 from bond.cli.table import Table
 from bond.database import BondDatabase
-import bond.proto
+
+from .base_command import BaseCommand
 
 
 class DevicesCommand(BaseCommand):

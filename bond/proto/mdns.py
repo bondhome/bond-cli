@@ -1,4 +1,5 @@
 from zeroconf import ServiceBrowser, Zeroconf
+
 from bond.database import BondDatabase
 
 
@@ -23,7 +24,7 @@ class Scanner(object):
     def __init__(self, on_success):
         self.zeroconf = Zeroconf()
         self.listener = Listener(on_success=on_success)
-        browser = ServiceBrowser(self.zeroconf, "_bond._tcp.local.", self.listener)
+        ServiceBrowser(self.zeroconf, "_bond._tcp.local.", self.listener)
 
     def __del__(self):
         del self.listener

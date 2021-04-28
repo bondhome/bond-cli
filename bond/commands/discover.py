@@ -1,7 +1,9 @@
-from .base_command import BaseCommand
+import time
+
 from bond.cli.table import Table
 from bond.proto.mdns import Scanner
-import time
+
+from .base_command import BaseCommand
 
 
 class DiscoverCommand(BaseCommand):
@@ -10,7 +12,7 @@ class DiscoverCommand(BaseCommand):
 
     def run(self, args):
         table = Table(["bondid", "ip", "port"])
-        scanner = Scanner(table.add_row)
+        Scanner(table.add_row)
         try:
             time.sleep(5)
         except KeyboardInterrupt:

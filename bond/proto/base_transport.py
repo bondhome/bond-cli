@@ -1,5 +1,5 @@
-from threading import Thread
 from collections import defaultdict
+from threading import Thread
 
 
 class BaseTransport(object):

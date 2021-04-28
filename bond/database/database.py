@@ -1,7 +1,7 @@
 import json
 import os
-from threading import RLock
 from collections.abc import MutableMapping
+from threading import RLock
 
 DB_FILENAME = os.path.expanduser("~/.bond/db.json")
 DB_DIRNAME = os.path.dirname(DB_FILENAME)
@@ -13,10 +13,10 @@ class BondDatabase(MutableMapping):
 
     def __new__(cls):
         """Takes the place of __init__ to only return a single instance of the database.
-           That is, BondDatabase() is a singleton.
-           Note: any initialization should go here, not in a new __init__ function.
-                 any __init__ for this class will be called *on every return value of
-                 this function*!"""
+        That is, BondDatabase() is a singleton.
+        Note: any initialization should go here, not in a new __init__ function.
+              any __init__ for this class will be called *on every return value of
+              this function*!"""
         if cls.__instance is None:
             cls.__instance = super(BondDatabase, cls).__new__(cls)
             cls.__instance.lock = RLock()

@@ -1,1 +1,1 @@
-from .database import BondDatabase
+from .database import BondDatabase  # noqa: F401
