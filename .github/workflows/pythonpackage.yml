@@ -15,15 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: gaurav-nelson/github-action-markdown-link-check@v1
-  python-linter:
-    runs-on: ubuntu-latest
-    name: Python linter
-    steps:
-      - uses: actions/checkout@master
-      - name: Lint with flake8
-        run: |
-          # stop the build if there are any errors. The GitHub editor is 127 chars wide
-          flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
   run-tests:
     name: Python tests
     runs-on: ubuntu-latest
@@ -41,6 +32,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -r requirements-test.txt
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are any errors. The GitHub editor is 127 chars wide
+          flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
       - name: Test with pytest
         run: |
           pytest
