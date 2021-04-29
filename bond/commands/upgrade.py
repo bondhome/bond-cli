@@ -1,10 +1,13 @@
-from .base_command import BaseCommand
-from bond.database import BondDatabase
-import time
-import bond.proto
-import sys
-import requests
 import json
+import sys
+import time
+
+import requests
+
+import bond.proto
+from bond.database import BondDatabase
+
+from .base_command import BaseCommand
 
 
 def register():
@@ -30,14 +33,14 @@ def get_s3_version(target, branch, depth=0):
     return json.loads(rsp.content)["versions"][depth]
 
 
-def do_upgrade(bondid, version_obj):
+def do_upgrade(bondid, version_obj):  # noqa: C901
     bond.proto.delete(bondid, topic="sys/upgrade")
     time.sleep(0.5)
     version_obj["port"] = "443"
     version_obj["http_port"] = "80"
     try:
         bond.proto.put(bondid, topic="sys/upgrade", body=version_obj)
-    except:
+    except:  # noqa: E722 - ignore bare except
         # TODO: when this ^ succeeds in starting an upgrade, it shouldn't be timing out
         # and raising an exception... and yet it is.
         pass
@@ -59,7 +62,7 @@ def do_upgrade(bondid, version_obj):
     print("Rebooting...")
     try:
         bond.proto.put(bondid, topic="sys/reboot", timeout=0.5)
-    except:
+    except:  # noqa: E722 - ignore bare except
         pass
     for _ in range(120):
         time.sleep(1)
@@ -94,8 +97,8 @@ class UpgradeCommand(BaseCommand):
         "--age": {
             "help": "number of releases to go back to. 0 is the latest version, 1 is the one before that and so on.",
             "type": int,
-            "default": 0
-        }
+            "default": 0,
+        },
     }
 
     def run(self, args):

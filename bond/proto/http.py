@@ -1,6 +1,8 @@
-from .base_transport import BaseTransport
-import requests
 import json
+
+import requests
+
+from .base_transport import BaseTransport
 
 
 class HTTP_Transport(BaseTransport):
@@ -45,7 +47,7 @@ class HTTP_Transport(BaseTransport):
         # TODO: add other fields like i, f, and t
         try:
             body = json.loads(rsp.text)
-        except:
+        except:  # noqa: E722 - ignore bare except
             body = None
         if rsp.status_code == 401:
             raise SystemExit("Invalid token! Have you set it with 'bond token' yet?")

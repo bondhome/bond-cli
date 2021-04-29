@@ -1,7 +1,9 @@
-from .base_command import BaseCommand
-from bond.database import BondDatabase
-import bond.proto
 from base64 import b64encode
+
+import bond.proto
+from bond.database import BondDatabase
+
+from .base_command import BaseCommand
 
 
 class WifiCommand(BaseCommand):
@@ -28,6 +30,7 @@ class WifiCommand(BaseCommand):
         if rsp["s"] > 299:
             print("HTTP %d %s" % (rsp["s"], rsp["b"]["_error_msg"]))
 
+
 class WifiShutdownCommand(BaseCommand):
     subcmd = "wifi_shutdown"
     help = "Shutdown WiFi until reboot (requires fw >= v2.11.4)"
@@ -38,11 +41,10 @@ class WifiShutdownCommand(BaseCommand):
         rsp = bond.proto.patch(
             bondid,
             topic="debug/wifi",
-            body={ "shutdown": 1 },
+            body={"shutdown": 1},
         )
         if rsp["s"] > 299:
             print("HTTP %d %s" % (rsp["s"], rsp["b"]["_error_msg"]))
-
 
 
 def register():

@@ -1,6 +1,5 @@
-from threading import Thread
 from queue import Queue
-from threading import RLock
+from threading import RLock, Thread
 
 KNRM = "\x1B[0m"
 KRED = "\x1B[31m"

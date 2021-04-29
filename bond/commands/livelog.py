@@ -1,14 +1,16 @@
-from .base_command import BaseCommand
-from bond.database import BondDatabase
-import bond.proto
-from .devices import DevicesCommand
 import datetime
-import socket
-import random
-import time
-import sys
 import os
+import random
+import socket
+import sys
+import time
+
 from requests.exceptions import RequestException
+
+import bond.proto
+from bond.database import BondDatabase
+
+from .base_command import BaseCommand
 
 LEVEL_MAP = {"warn": 2, "info": 3, "debug": 4, "trace": 5}
 
@@ -42,7 +44,7 @@ def listen(my_ip):
 
 def auto_int(string: str) -> int:
     """Attempts to automatically detect the base of the input string and parse it as
-       an int"""
+    an int"""
     return int(string, 0)
 
 
@@ -53,7 +55,8 @@ class LivelogCommand(BaseCommand):
         "--ip": {"help": "IP of log server"},
         "--port": {"help": "UDP port of log server"},
         "--level": {
-            "help": "set the verbosity: warn, info, debug (may slow the Bond), or trace (will make the bond unuseably slow, it's recommended to only use this in subys-level)",
+            "help": "set the verbosity: warn, info, debug (may slow the Bond),"
+            "or trace (will make the bond unuseably slow, it's recommended to only use this in subys-level)",
             "choices": LEVEL_MAP.keys(),
         },
         "--subsys": {
@@ -65,13 +68,13 @@ class LivelogCommand(BaseCommand):
             "choices": LEVEL_MAP.keys(),
         },
         "--out": {"help": "a filename to write the logs to", "default": os.devnull},
-        "--delete": { # TODO: refactor to subcommand when possible
+        "--delete": {  # TODO: refactor to subcommand when possible
             "help": "stop the bond from logging, and restores its default verbosity, improving performance",
             "action": "store_true",
         },
     }
 
-    def run(self, args):
+    def run(self, args):  # noqa: C901
         bondid = BondDatabase.get_assert_selected_bondid()
 
         def tear_down_livelog():
