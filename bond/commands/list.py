@@ -1,6 +1,7 @@
-from .base_command import BaseCommand
-from bond.database import BondDatabase
 from bond.cli.table import Table
+from bond.database import BondDatabase
+
+from .base_command import BaseCommand
 
 
 class ListCommand(BaseCommand):

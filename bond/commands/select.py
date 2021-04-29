@@ -1,7 +1,7 @@
+from bond.database import BondDatabase
+
 from .base_command import BaseCommand
 from .token import check_unlocked_token
-from bond.database import BondDatabase
-from ..cli.console import LogLine
 
 
 class SelectCommand(BaseCommand):
@@ -30,7 +30,8 @@ class SelectCommand(BaseCommand):
             ]
             if len(matches) == 0:
                 proceed = input(
-                    "%s hasn't been discovered by bond-cli ('bond discover'). Proceed with setting it? It may not be reachable. y/N"
+                    "%s hasn't been discovered by bond-cli ('bond discover')."
+                    "Proceed with setting it? It may not be reachable. y/N"
                     % args.bond_id
                 )
                 if proceed.lower() == "y":
@@ -54,7 +55,7 @@ class SelectCommand(BaseCommand):
                 BondDatabase.set_bond(bond_id, "port", args.port)
                 print("Set %s port %s" % (bond_id, args.ip))
             print("Selected Bond: %s" % BondDatabase().get("selected_bondid"))
-            token = check_unlocked_token()
+            check_unlocked_token()
         elif args.clear:
             BondDatabase().pop("selected_bondid", None)
             print("Cleared selected Bond")

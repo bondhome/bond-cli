@@ -1,5 +1,6 @@
-import bond.cli
 import sys
+
+import bond.cli
 
 COMMANDS = [
     "discover",
