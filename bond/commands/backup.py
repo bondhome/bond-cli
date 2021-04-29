@@ -12,6 +12,7 @@ import os
 
 Q = Queue()
 
+
 class ChunkedRequestHandler(SimpleHTTPRequestHandler):
     def do_PUT(self):
         self.send_response(200)
@@ -43,64 +44,73 @@ class ChunkedRequestHandler(SimpleHTTPRequestHandler):
                         break
         Q.put(path)
 
+
 def start_daemon(port):
     os.chdir(DB_DIRNAME)
     httpd = HTTPServer(("127.0.0.1", port), ChunkedRequestHandler)
     print("Serving at port:", httpd.server_port)
     Thread(target=httpd.serve_forever, daemon=True).start()
 
+
 def wait_upload(timeout=None):
     return Q.get(timeout=timeout)
+
 
 class BackupCommand(BaseCommand):
     subcmd = "backup"
     help = """Backup a Bond"""
-    arguments = { }
+    arguments = {}
 
     def run(self, args):
         start_daemon(4444)
         bondid = BondDatabase.get_assert_selected_bondid()
         timestamp = str(int(time.time()))
         body = {
-            'backup': 1,
-            'http_port': '4444',
-            'path': '',
-            'timestamp': timestamp,
-            }
+            "backup": 1,
+            "http_port": "4444",
+            "path": "",
+            "timestamp": timestamp,
+        }
         rsp = bond.proto.put(bondid, topic="sys/backup", body=body)
         print(rsp)
-        if rsp['s'] != 200:
-            raise Exception("Error HTTP %d starting backup: %s",
-                rsp['s'],
-                rsp['b']['_error_msg'])
-        t0 = time.time()
+        if rsp["s"] != 200:
+            raise Exception(
+                "Error HTTP %d starting backup: %s", rsp["s"], rsp["b"]["_error_msg"]
+            )
+        time.time()
         while True:
             time.sleep(1)
             rsp = bond.proto.get(bondid, topic="sys/backup")
-            if rsp['b']['backup'] == -1:
-                raise Exception("Backup error: %s" % rsp['b']['error_msg'])
-            if rsp['b']['backup'] == 2:
+            if rsp["b"]["backup"] == -1:
+                raise Exception("Backup error: %s" % rsp["b"]["error_msg"])
+            if rsp["b"]["backup"] == 2:
                 print("Bond reports backup success.")
                 break
-        path = ''
+        path = ""
         while timestamp not in path:
             path = wait_upload(5)
         print("Backup saved in ~/.bond directory")
 
+
 def get_file_list():
-    fns = list(map(str,Path(DB_DIRNAME).glob('**/*.bondbackup')))
+    fns = list(map(str, Path(DB_DIRNAME).glob("**/*.bondbackup")))
     rv = []
     for fn in fns:
-        tok = fn.split('_')
-        rv.append({
-            'file': fn,
-            'bondid': tok[0],
-            'version': tok[1],
-            'timestamp': int(tok[2]),
-            'datestr': datetime.datetime.utcfromtimestamp(int(tok[2])).astimezone().strftime('%Y-%m-%d %H:%M:%S'),
-        })
-    rv.sort(key=lambda x: x['timestamp'], reverse=True)
+        tok = fn.split("_")
+        rv.append(
+            {
+                "file": fn,
+                "bondid": tok[0],
+                "version": tok[1],
+                "timestamp": int(tok[2]),
+                "datestr": datetime.datetime.utcfromtimestamp(int(tok[2]))
+                .astimezone()
+                .strftime("%Y-%m-%d %H:%M:%S"),
+            }
+        )
+    rv.sort(key=lambda x: x["timestamp"], reverse=True)
     return rv
+
 
 class RestoreCommand(BaseCommand):
     subcmd = "restore"
@@ -120,10 +130,10 @@ class RestoreCommand(BaseCommand):
         "--no-reboot": {
             "help": "Only for test purposes. May cause unexpected behavior.",
             "action": "store_true",
-        }
+        },
     }
 
-    def run(self, args):
+    def run(self, args):  # noqa: C901
         file_list = get_file_list()
         if args.list or not (args.file or args.latest) or len(file_list) == 0:
             if len(file_list) == 0:
@@ -131,37 +141,37 @@ class RestoreCommand(BaseCommand):
             else:
                 print("Found %d backups: " % len(file_list))
                 for f in get_file_list():
-                    print("  " + f['datestr'] + '   ' + f['file'])
+                    print("  " + f["datestr"] + "   " + f["file"])
             return
 
         if args.latest:
             if len(file_list) == 0:
                 print("No backups found")
                 return
-            args.file = file_list[-1]['file']
+            args.file = file_list[-1]["file"]
 
         start_daemon(4444)
         bondid = BondDatabase.get_assert_selected_bondid()
-        timestamp = str(int(time.time()))
+        # timestamp = str(int(time.time()))
         body = {
-            'restore': 1,
-            'http_port': '4444',
-            'path': '',
-            'filename': args.file,
-            }
+            "restore": 1,
+            "http_port": "4444",
+            "path": "",
+            "filename": args.file,
+        }
         rsp = bond.proto.put(bondid, topic="sys/backup", body=body)
         print(rsp)
-        if rsp['s'] != 200:
-            raise Exception("Error HTTP %d starting restore: %s",
-                rsp['s'],
-                rsp['b']['_error_msg'])
-        t0 = time.time()
+        if rsp["s"] != 200:
+            raise Exception(
+                "Error HTTP %d starting restore: %s", rsp["s"], rsp["b"]["_error_msg"]
+            )
+        time.time()
         while True:
             time.sleep(1)
             rsp = bond.proto.get(bondid, topic="sys/backup")
-            if rsp['b']['restore'] == -1:
-                raise Exception("Restore error: %s" % rsp['b']['error_msg'])
-            if rsp['b']['restore'] == 2:
+            if rsp["b"]["restore"] == -1:
+                raise Exception("Restore error: %s" % rsp["b"]["error_msg"])
+            if rsp["b"]["restore"] == 2:
                 print("Bond reports restore success!")
                 break
         if args.no_reboot:
@@ -172,6 +182,7 @@ class RestoreCommand(BaseCommand):
             bond.proto.put(bondid, topic="sys/reboot")
         except requests.exceptions.ReadTimeout:
             pass
+
 
 def register():
     BackupCommand()
