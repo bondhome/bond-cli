@@ -47,7 +47,7 @@ class ChunkedRequestHandler(SimpleHTTPRequestHandler):
 
 def start_daemon(port):
     os.chdir(DB_DIRNAME)
-    httpd = HTTPServer(("127.0.0.1", port), ChunkedRequestHandler)
+    httpd = HTTPServer(("0.0.0.0", port), ChunkedRequestHandler)
     print("Serving at port:", httpd.server_port)
     Thread(target=httpd.serve_forever, daemon=True).start()
 
