@@ -12,7 +12,7 @@ class DiscoverCommand(BaseCommand):
 
     def run(self, args):
         table = Table(["bondid", "ip", "port"])
-        Scanner(table.add_row)
+        scanner = Scanner(table.add_row)    # noqa: F841
         try:
             time.sleep(5)
         except KeyboardInterrupt:
