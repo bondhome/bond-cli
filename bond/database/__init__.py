@@ -1,1 +1,1 @@
-from .database import BondDatabase  # noqa: F401
+from .database import BondDatabase, DB_DIRNAME  # noqa: F401

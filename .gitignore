@@ -139,3 +139,6 @@ dmypy.json
 ###### Bond-specific ######
 
 *.livelog
+*.bondbackup
+*.crt
+*.key
