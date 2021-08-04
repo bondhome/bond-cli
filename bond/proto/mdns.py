@@ -19,6 +19,10 @@ class Listener:
         BondDatabase.set_bond(bondid, "port", port)
         self.on_success({"bondid": bondid, "ip": ip, "port": port})
 
+    def update_service(self, zeroconf, type, name):
+        """Callback when a service is updated."""
+        pass
+
 
 class Scanner(object):
     def __init__(self, on_success):
