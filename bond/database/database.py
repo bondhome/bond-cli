@@ -64,8 +64,17 @@ class BondDatabase(MutableMapping):
         return selected_bondid
 
     @staticmethod
-    def get_bonds():
-        return BondDatabase().setdefault("bonds", dict())
+    def get_bonds(require_token=False):
+        all_bonds = BondDatabase().setdefault("bonds", dict())
+        if not require_token:
+            return all_bonds
+        bonds_with_tokens = dict()
+        for bond_id in all_bonds.keys():
+            token = all_bonds[bond_id].setdefault("token", None)
+            if token is None:
+                continue
+            bonds_with_tokens[bond_id] = all_bonds[bond_id]
+        return bonds_with_tokens
 
     @staticmethod
     def get_bond(bondid):
