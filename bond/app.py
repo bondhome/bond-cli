@@ -10,6 +10,7 @@ COMMANDS = [
     "list",
     "devices",
     "device_create",
+    "device_delete",
     "livelog",
     "signal",
     "reset",
