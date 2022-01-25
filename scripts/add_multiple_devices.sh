@@ -6,7 +6,7 @@ helpFunction()
   echo "Usage: $0 --bondID ZXBL00000 --deviceName 'Test Device' --location 'Bedroom' --template RMS12 --quantity 10"
   echo -e "\t--bondID The ID of the Bond you want to create the new devices"
   echo -e "\t--deviceName The name of the device. This will be a prefix of the actual name. I.e: 'Test Device 1', 'Test Device 2'..."
-  echo -e "\t--location Device Location (Bedroom, Living Room, etc.)"
+  echo -e "\t--location The device location (Bedroom, Living Room, etc.)"
   echo -e "\t--template The device template name to be created (RCF84, A1, etc.)"
   echo -e "\t--quantity The amount of devices that will be created"
   exit 1 # Exit script after printing help
