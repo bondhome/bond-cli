@@ -18,7 +18,7 @@ Usage: ./scripts/add_multiple_devices.sh --bondID ZXBL00000 --deviceName 'Test D
 ### Example
 ```bash
 # On the repository root folder
-./scripts/add_multiple_devices.sh --bondID ZPEA77140 --deviceName "Test Shade" --location "Testing" --template RMS12 --quantity 15
+./scripts/add_multiple_devices.sh --bondID ZPEA12345 --deviceName "Test Shade" --location "Testing" --template RMS12 --quantity 15
 ```
 
 That will create 15 RMS12 Motorized Shades starting with `Test Shade 01` through `Test Shade 15` in the `Testing` location.
