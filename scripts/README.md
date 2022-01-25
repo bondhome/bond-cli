@@ -3,7 +3,7 @@
 Here you can find some useful scripts to automate tasks using the `bond-cli` tool.
 
 ## [add_multiple_devices.sh](add_multiple_devices.sh)
-A script to add multiple copies of the same device. Useful for testing.
+A script to add multiple devices with the same template, location, and name prefix. Useful for testing.
 
 ### Usage
 ```
