@@ -1,14 +1,16 @@
-from .base_command import BaseCommand
-from bond.database import BondDatabase, DB_DIRNAME
-import bond.proto
-import requests.exceptions
-from http.server import HTTPServer, SimpleHTTPRequestHandler
-import time
-from threading import Thread
-from queue import Queue
-from pathlib import Path
 import datetime
 import os
+import time
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+from pathlib import Path
+from queue import Queue
+from threading import Thread
+
+import requests.exceptions
+
+import bond.proto
+from bond.commands.base_command import BaseCommand
+from bond.database import BondDatabase, DB_DIRNAME
 
 Q = Queue()
 

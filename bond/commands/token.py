@@ -1,7 +1,6 @@
 import bond.proto
+from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
-
-from .base_command import BaseCommand
 
 
 def update_token(token, bond_id=None):

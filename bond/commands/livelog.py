@@ -8,9 +8,8 @@ import time
 from requests.exceptions import RequestException
 
 import bond.proto
+from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
-
-from .base_command import BaseCommand
 
 LEVEL_MAP = {"warn": 2, "info": 3, "debug": 4, "trace": 5}
 

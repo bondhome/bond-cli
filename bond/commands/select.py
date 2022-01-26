@@ -1,7 +1,6 @@
+from bond.commands.base_command import BaseCommand
+from bond.commands.token import check_unlocked_token
 from bond.database import BondDatabase
-
-from .base_command import BaseCommand
-from .token import check_unlocked_token
 
 
 class SelectCommand(BaseCommand):

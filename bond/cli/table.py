@@ -1,4 +1,4 @@
-from .console import lock
+from bond.cli.console import lock
 
 
 class Table(object):

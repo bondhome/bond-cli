@@ -1,8 +1,7 @@
 import bond.proto
+from bond.commands.base_command import BaseCommand
+from bond.commands.devices import DevicesCommand
 from bond.database import BondDatabase
-
-from .base_command import BaseCommand
-from .devices import DevicesCommand
 
 
 class DeviceCreateCommand(BaseCommand):

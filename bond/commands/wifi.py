@@ -1,9 +1,8 @@
 from base64 import b64encode
 
 import bond.proto
+from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
-
-from .base_command import BaseCommand
 
 
 class WifiCommand(BaseCommand):

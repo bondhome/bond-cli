@@ -1,9 +1,8 @@
 import time
 
 from bond.cli.table import Table
+from bond.commands.base_command import BaseCommand
 from bond.proto.mdns import Scanner
-
-from .base_command import BaseCommand
 
 
 class DiscoverCommand(BaseCommand):
