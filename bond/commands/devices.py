@@ -7,12 +7,16 @@ from bond.database import BondDatabase
 class DevicesCommand(BaseCommand):
     subcmd = "devices"
     help = "Interact with the selected Bond's devices."
+    arguments = {
+        "-q": {"help": "dont print table outline (quiet mode)", "action": "store_true"},
+    }
 
     def run(self, args):
         bond_id = BondDatabase.get_assert_selected_bondid()
         dev_ids = bond.proto.get(bond_id, topic="devices").get("b", {})
-        print("Devices on %s" % bond_id)
-        with Table(["dev_id", "name", "location"]) as table:
+        if not args.q:
+            print("Devices on %s" % bond_id)
+        with Table(["dev_id", "name", "location"], quiet=args.q) as table:
             dev_ids.pop("_", None)
             for dev_id in dev_ids:
                 dev = bond.proto.get(bond_id, topic="devices/%s" % dev_id).get("b", {})
