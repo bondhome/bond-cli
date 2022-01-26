@@ -2,7 +2,7 @@ from bond.cli.console import lock
 
 
 class Table(object):
-    col_width = 16
+    col_width = 20
 
     def __init__(self, header, quiet=False):
         lock.acquire()
