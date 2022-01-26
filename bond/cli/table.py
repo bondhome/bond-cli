@@ -4,25 +4,33 @@ from bond.cli.console import lock
 class Table(object):
     col_width = 16
 
-    def __init__(self, header):
+    def __init__(self, header, quiet=False):
         lock.acquire()
         self.open = True
         self.header = header
+        self.quiet = quiet
         self.print_header()
 
     def print_tabbed(self, lst):
-        print("|", end="")
+        separator = "" if self.quiet else "|"
+
+        print("", end=separator)
+
         for item in lst:
-            print(("%-" + str(self.col_width) + "s|") % str(item), end="")
+            print(f"{str(item):<{self.col_width}}", end=separator)
+
         print()
 
-    def print_boarder(self):
-        print("-" + "-" * ((self.col_width + 1) * len(self.header) - 1) + "-")
+    def print_border(self):
+        if not self.quiet:
+            print("-" * ((self.col_width + 1) * len(self.header) + 1))
 
     def print_header(self):
-        self.print_boarder()
+        self.print_border()
         self.print_tabbed(self.header)
-        self.print_tabbed([("-" * self.col_width) for h in self.header])
+
+        if not self.quiet:
+            self.print_tabbed([("-" * self.col_width) for _h in self.header])
 
     def add_row(self, row):
         if self.open:
@@ -30,7 +38,7 @@ class Table(object):
 
     def close(self):
         if self.open:
-            self.print_boarder()
+            self.print_border()
             lock.release()
             self.open = False
 
