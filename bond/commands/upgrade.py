@@ -98,6 +98,10 @@ class UpgradeCommand(BaseCommand):
             "type": int,
             "default": 0,
         },
+        "--force": {
+            "help": "force upgrade with no input from user",
+            "action": "store_true"
+        },
         "--bondid": {
             "help": "ignore selected Bond and use provided"
         },
@@ -135,7 +139,7 @@ class UpgradeCommand(BaseCommand):
         print(f"Installing Version: \t{new_ver}")
         if new_ver == current_ver:
             print("WARNING: Versions are identical.")
-        if input("Are you sure? [N/y] ").lower() != "y":
+        if not args.force and input("Are you sure? [N/y] ").lower() != "y":
             raise SystemExit("Pfew. That was close. Aborting!")
         print("Requesting upgrade...")
         do_upgrade(bond_id, version_obj)
