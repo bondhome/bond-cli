@@ -48,7 +48,6 @@ class DeviceCreateCommand(BaseCommand):
         )
         if rsp["s"] > 299:
             print("HTTP %d %s" % (rsp["s"], rsp["b"]["_error_msg"]))
-        DevicesCommand().run(None)
 
 
 def register():
