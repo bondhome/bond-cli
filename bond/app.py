@@ -11,6 +11,7 @@ COMMANDS = [
     "devices",
     "device_create",
     "groups",
+    "group_create",
     "livelog",
     "signal",
     "reset",
