@@ -8,9 +8,7 @@ class GroupsCommand(BaseCommand):
     subcmd = "groups"
     help = "Interact with the selected Bond's groups."
     arguments = {
-        "--bondid": {
-            "help": "ignore selected Bond and use provided"
-        },
+        "--bondid": {"help": "ignore selected Bond and use provided"},
         "-q": {
             "help": "dont print table outline (quiet mode)",
             "action": "store_true",
@@ -25,7 +23,9 @@ class GroupsCommand(BaseCommand):
         with Table(["group_id", "name", "types", "devices"], quiet=args.q) as table:
             group_ids.pop("_", None)
             for group_id in group_ids:
-                group = bond.proto.get(bond_id, topic="groups/%s" % group_id).get("b", {})
+                group = bond.proto.get(bond_id, topic="groups/%s" % group_id).get(
+                    "b", {}
+                )
                 table.add_row(
                     {
                         "group_id": group_id,

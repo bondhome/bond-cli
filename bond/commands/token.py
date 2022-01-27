@@ -38,9 +38,13 @@ class TokenCommand(BaseCommand):
             print(f"{bond_id}'s token is not unlocked.")
             stored_token = BondDatabase.get_bond(bond_id).get("token")
             if stored_token:
-                print(f"There's already a token for {bond_id} in your local database: {stored_token}.")
+                print(
+                    f"There's already a token for {bond_id} in your local database: {stored_token}."
+                )
                 print("If this token is obsolete, you will need to set the new token.")
-                print("You can set it manually with 'bond token <token>', or unlock the token and run 'bond token'")
+                print(
+                    "You can set it manually with 'bond token <token>', or unlock the token and run 'bond token'"
+                )
                 print("(tip: the token is unlocked for a short period after a reboot)")
 
 

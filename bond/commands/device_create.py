@@ -10,7 +10,10 @@ class DeviceCreateCommand(BaseCommand):
     arguments = {
         "--name": {"help": "device name", "required": True},
         "--template": {"help": "template name (RCF84, A1, etc.)", "required": True},
-        "--location": {"help": "location name (Bedroom, Living Room, etc.)", "required": True},
+        "--location": {
+            "help": "location name (Bedroom, Living Room, etc.)",
+            "required": True,
+        },
         "--addr": {"help": "device address (binary)", "required": False},
         "--freq": {"help": "signal frequency (kHz)", "type": int, "required": False},
         "--bps": {
@@ -23,9 +26,7 @@ class DeviceCreateCommand(BaseCommand):
             "type": int,
             "required": False,
         },
-        "--bondid": {
-            "help": "ignore selected Bond and use provided"
-        },
+        "--bondid": {"help": "ignore selected Bond and use provided"},
     }
 
     def run(self, args):

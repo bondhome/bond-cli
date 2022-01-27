@@ -100,11 +100,9 @@ class UpgradeCommand(BaseCommand):
         },
         "--force": {
             "help": "force upgrade with no input from user",
-            "action": "store_true"
+            "action": "store_true",
         },
-        "--bondid": {
-            "help": "ignore selected Bond and use provided"
-        },
+        "--bondid": {"help": "ignore selected Bond and use provided"},
     }
 
     def run(self, args):

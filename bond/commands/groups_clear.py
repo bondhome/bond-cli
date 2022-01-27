@@ -7,15 +7,11 @@ class GroupsClearCommand(BaseCommand):
     subcmd = "groups_clear"
     help = "Remove all Bond's devices."
     arguments = {
-        "--bondid": {
-            "help": "ignore selected Bond and use provided"
-        },
-        "--groupid": {
-            "help": "delete single group"
-        },
+        "--bondid": {"help": "ignore selected Bond and use provided"},
+        "--groupid": {"help": "delete single group"},
         "--force": {
             "help": "force deletion with no input from user",
-            "action": "store_true"
+            "action": "store_true",
         },
     }
 
