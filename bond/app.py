@@ -10,6 +10,7 @@ COMMANDS = [
     "list",
     "devices",
     "device_create",
+    "devices_clear",
     "groups",
     "group_create",
     "livelog",
