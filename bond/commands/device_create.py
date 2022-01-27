@@ -23,10 +23,13 @@ class DeviceCreateCommand(BaseCommand):
             "type": int,
             "required": False,
         },
+        "--bondid": {
+            "help": "ignore selected Bond and use provided"
+        },
     }
 
     def run(self, args):
-        bondid = BondDatabase.get_assert_selected_bondid()
+        bond_id = args.bondid or BondDatabase.get_assert_selected_bondid()
         properties = {}
         if args.addr:
             properties["addr"] = args.addr
@@ -37,7 +40,7 @@ class DeviceCreateCommand(BaseCommand):
         if args.zero_gap:
             properties["zero_gap"] = args.zero_gap
         rsp = bond.proto.post(
-            bondid,
+            bond_id,
             topic="devices",
             body={
                 "name": args.name,

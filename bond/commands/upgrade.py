@@ -98,12 +98,15 @@ class UpgradeCommand(BaseCommand):
             "type": int,
             "default": 0,
         },
+        "--bondid": {
+            "help": "ignore selected Bond and use provided"
+        },
     }
 
     def run(self, args):
-        bondid = BondDatabase.get_assert_selected_bondid()
+        bond_id = args.bondid or BondDatabase.get_assert_selected_bondid()
         print("Connecting to BOND...")
-        sys_version = bond.proto.get(bondid, topic="sys/version")["b"]
+        sys_version = bond.proto.get(bond_id, topic="sys/version")["b"]
         target = sys_version["target"]
         current_ver = sys_version["fw_ver"]
         print(f"Detected Target: \t{target}")
@@ -135,4 +138,4 @@ class UpgradeCommand(BaseCommand):
         if input("Are you sure? [N/y] ").lower() != "y":
             raise SystemExit("Pfew. That was close. Aborting!")
         print("Requesting upgrade...")
-        do_upgrade(bondid, version_obj)
+        do_upgrade(bond_id, version_obj)
