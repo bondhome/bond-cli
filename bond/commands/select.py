@@ -58,6 +58,8 @@ class SelectCommand(BaseCommand):
         elif args.clear:
             BondDatabase().pop("selected_bondid", None)
             print("Cleared selected Bond")
+        else:
+            print("Bond selected: " + BondDatabase().get_assert_selected_bondid())
 
 
 def register():
