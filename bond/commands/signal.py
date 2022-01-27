@@ -18,7 +18,7 @@ class SignalCommand(BaseCommand):
         "--encoding": {"help": "The signal encoding", "default": "cq"},
         "--modulation": {"help": "The signal modulation", "default": "OOK"},
         "--use-scan": {
-            "help": "Whether or not to use the most recently-scanned buffer (takes precedence over all other arguments!)",
+            "help": "Whether or not to use the most recently-scanned buffer (takes precedence over all other arguments!)",  # noqa: E501
             "action": "store_true",
         },
     }
