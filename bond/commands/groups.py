@@ -21,8 +21,9 @@ class GroupsCommand(BaseCommand):
         if not args.q:
             print("Groups on %s" % bond_id)
         with Table(["group_id", "name", "types", "devices"], quiet=args.q) as table:
-            group_ids.pop("_", None)
             for group_id in group_ids:
+                if group_id.startswith("_"):
+                    continue
                 group = bond.proto.get(bond_id, topic="groups/%s" % group_id).get(
                     "b", {}
                 )

@@ -18,8 +18,9 @@ class DevicesCommand(BaseCommand):
         if not args.q:
             print("Devices on %s" % bond_id)
         with Table(["dev_id", "name", "location"], quiet=args.q) as table:
-            dev_ids.pop("_", None)
             for dev_id in dev_ids:
+                if dev_id.startswith("_"):
+                    continue
                 dev = bond.proto.get(bond_id, topic="devices/%s" % dev_id).get("b", {})
                 table.add_row(
                     {
