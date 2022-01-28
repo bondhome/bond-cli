@@ -9,7 +9,6 @@ from threading import Thread
 import requests.exceptions
 
 import bond.proto
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase, DB_DIRNAME
 
 Q = Queue()
@@ -58,7 +57,7 @@ def wait_upload(timeout=None):
     return Q.get(timeout=timeout)
 
 
-class BackupCommand(BaseCommand):
+class BackupCommand(object):
     subcmd = "backup"
     help = """Backup a Bond"""
     arguments = {}
@@ -114,7 +113,7 @@ def get_file_list():
     return rv
 
 
-class RestoreCommand(BaseCommand):
+class RestoreCommand(object):
     subcmd = "restore"
     help = """Restore a Bond."""
     arguments = {
@@ -184,8 +183,3 @@ class RestoreCommand(BaseCommand):
             bond.proto.put(bondid, topic="sys/reboot")
         except requests.exceptions.ReadTimeout:
             pass
-
-
-def register():
-    BackupCommand()
-    RestoreCommand()

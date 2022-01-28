@@ -1,9 +1,8 @@
 import bond.proto
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
 
 
-class SignalCommand(BaseCommand):
+class SignalCommand(object):
     subcmd = "signal"
     help = "Transmit a signal. [Bridge only]"
     arguments = {

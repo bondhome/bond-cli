@@ -1,9 +1,8 @@
 import bond.proto
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
 
 
-class VersionCommand(BaseCommand):
+class VersionCommand(object):
     subcmd = "version"
     help = "Get firmware version and target of the selected Bond."
     arguments = {"--bondid": {"help": "ignore selected Bond and use provided"}}

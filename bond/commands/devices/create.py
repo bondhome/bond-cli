@@ -1,10 +1,9 @@
 import bond.proto
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
 
 
-class DeviceCreateCommand(BaseCommand):
-    subcmd = "device_create"
+class DeviceCreateCommand(object):
+    subcmd = "create"
     help = "Create a new device. [Bridge only]"
     arguments = {
         "--name": {"help": "device name", "required": True},
@@ -50,8 +49,4 @@ class DeviceCreateCommand(BaseCommand):
             },
         )
         if rsp["s"] > 299:
-            print("HTTP %d %s" % (rsp["s"], rsp["b"]["_error_msg"]))
-
-
-def register():
-    DeviceCreateCommand()
+            print(f"HTTP {rsp['s']} {rsp['b']['_error_msg']}")

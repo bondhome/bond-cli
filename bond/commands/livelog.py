@@ -8,7 +8,6 @@ import time
 from requests.exceptions import RequestException
 
 import bond.proto
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
 
 LEVEL_MAP = {"warn": 2, "info": 3, "debug": 4, "trace": 5}
@@ -47,7 +46,7 @@ def auto_int(string: str) -> int:
     return int(string, 0)
 
 
-class LivelogCommand(BaseCommand):
+class LivelogCommand(object):
     subcmd = "livelog"
     help = "Start streaming logs"
     arguments = {

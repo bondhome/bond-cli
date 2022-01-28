@@ -5,7 +5,6 @@ import time
 import requests
 
 import bond.proto
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
 
 
@@ -81,7 +80,7 @@ def do_upgrade(bondid, version_obj):  # noqa: C901
     print(f"Your Bond is now on version {rsp['b']['fw_ver']}!")
 
 
-class UpgradeCommand(BaseCommand):
+class UpgradeCommand(object):
     subcmd = "upgrade"
     help = "Upgrade your Bond. Choose either a released firmware or a firmware from a specific branch"
     arguments = {

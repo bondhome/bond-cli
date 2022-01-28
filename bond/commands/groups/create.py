@@ -1,10 +1,9 @@
 import bond.proto
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
 
 
-class GroupCreateCommand(BaseCommand):
-    subcmd = "group_create"
+class GroupCreateCommand(object):
+    subcmd = "create"
     help = "Create a new group."
     arguments = {
         "--name": {"help": "group name", "required": True},
@@ -29,8 +28,4 @@ class GroupCreateCommand(BaseCommand):
             body=create_group_body,
         )
         if rsp["s"] > 299:
-            print("HTTP %d %s" % (rsp["s"], rsp["b"]["_error_msg"]))
-
-
-def register():
-    GroupCreateCommand()
+            print(f"HTTP {rsp['s']} {rsp['b']['_error_msg']}")

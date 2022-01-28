@@ -1,11 +1,10 @@
 from base64 import b64encode
 
 import bond.proto
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
 
 
-class WifiCommand(BaseCommand):
+class WifiCommand(object):
     subcmd = "wifi"
     help = "Connect to WiFi"
     arguments = {
@@ -30,7 +29,7 @@ class WifiCommand(BaseCommand):
             print("HTTP %d %s" % (rsp["s"], rsp["b"]["_error_msg"]))
 
 
-class WifiShutdownCommand(BaseCommand):
+class WifiShutdownCommand(object):
     subcmd = "wifi_shutdown"
     help = "Shutdown WiFi until reboot (requires fw >= v2.11.4)"
     arguments = {}

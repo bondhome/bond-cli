@@ -1,9 +1,8 @@
 import bond.proto
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
 
 
-class ResetCommand(BaseCommand):
+class ResetCommand(object):
     subcmd = "reset"
     help = """Reset a Bond to set it up again on WiFi, clear its database, or
               reset its firmware to a rescue image"""

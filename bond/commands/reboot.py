@@ -1,11 +1,10 @@
 import requests.exceptions
 
 import bond.proto
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
 
 
-class RebootCommand(BaseCommand):
+class RebootCommand(object):
     subcmd = "reboot"
     help = """Reboot a Bond. No reset is performed."""
     arguments = {"--cold": {"help": "simulate cold boot", "action": "store_true"}}

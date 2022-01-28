@@ -1,9 +1,8 @@
-from bond.commands.base_command import BaseCommand
 from bond.commands.token import check_unlocked_token
 from bond.database import BondDatabase
 
 
-class SelectCommand(BaseCommand):
+class SelectCommand(object):
     subcmd = "select"
     help = """Select a single Bond to interact with,
               If the token of this Bond is unlocked, it will be set.

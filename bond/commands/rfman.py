@@ -1,9 +1,8 @@
 import bond.proto
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
 
 
-class RFManCommand(BaseCommand):
+class RFManCommand(object):
     subcmd = "rfman"
     help = "Configure the RF Manager [Bridge Only]"
     arguments = {
