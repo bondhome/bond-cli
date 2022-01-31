@@ -24,9 +24,7 @@ class GroupsListCommand(object):
             for group_id in group_ids:
                 if group_id.startswith("_"):
                     continue
-                group = bond.proto.get(bond_id, topic="groups/%s" % group_id).get(
-                    "b", {}
-                )
+                group = bond.proto.get(bond_id, topic=f"groups/{group_id}").get("b", {})
                 table.add_row(
                     {
                         "group_id": group_id,
