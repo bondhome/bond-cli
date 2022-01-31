@@ -21,10 +21,16 @@ class DeviceDeleteCommand(object):
     def run(self, args):
         bond_id = args.bondid or BondDatabase.get_assert_selected_bondid()
         if args.all:
-            if args.force or input(f"Delete all devices from {bond_id}? [N/y] ").lower() == "y":
+            if (
+                args.force
+                or input(f"Delete all devices from {bond_id}? [N/y] ").lower() == "y"
+            ):
                 self.delete_all_devices(bond_id)
         elif args.device_id:
-            if args.force or input(f"Delete device {args.device_id}? [N/y] ").lower() == "y":
+            if (
+                args.force
+                or input(f"Delete device {args.device_id}? [N/y] ").lower() == "y"
+            ):
                 bond.proto.delete(bond_id, topic=f"devices/{args.device_id}")
                 print(f"{args.device_id} device deleted.")
 

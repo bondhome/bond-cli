@@ -21,10 +21,16 @@ class GroupDeleteCommand(object):
     def run(self, args):
         bond_id = args.bondid or BondDatabase.get_assert_selected_bondid()
         if args.all:
-            if args.force or input(f"Delete all groups from {bond_id}? [N/y] ").lower() == "y":
+            if (
+                args.force
+                or input(f"Delete all groups from {bond_id}? [N/y] ").lower() == "y"
+            ):
                 self.delete_all_groups(bond_id)
         elif args.group_id:
-            if args.force or input(f"Delete group {args.group_id}? [N/y] ").lower() == "y":
+            if (
+                args.force
+                or input(f"Delete group {args.group_id}? [N/y] ").lower() == "y"
+            ):
                 bond.proto.delete(bond_id, topic=f"groups/{args.group_id}")
                 print(f"{args.group_id} group deleted.")
 
