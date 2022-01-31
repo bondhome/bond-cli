@@ -15,7 +15,9 @@ class GroupDeleteCommand(object):
 
     def setup(self, parser):
         group = parser.add_mutually_exclusive_group()
-        group.add_argument("--group-ids", help="ID of the group(s) being deleted", nargs="*")
+        group.add_argument(
+            "--group-ids", help="ID of the group(s) being deleted", nargs="*"
+        )
         group.add_argument("--all", help="delete all groups", action="store_true")
 
     def run(self, args):

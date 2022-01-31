@@ -15,7 +15,9 @@ class DeviceDeleteCommand(object):
 
     def setup(self, parser):
         group = parser.add_mutually_exclusive_group()
-        group.add_argument("--device-ids", help="ID of the device(s) being deleted", nargs="*")
+        group.add_argument(
+            "--device-ids", help="ID of the device(s) being deleted", nargs="*"
+        )
         group.add_argument("--all", help="delete all devices", action="store_true")
 
     def run(self, args):
