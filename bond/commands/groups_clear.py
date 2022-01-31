@@ -5,7 +5,7 @@ from bond.database import BondDatabase
 
 class GroupsClearCommand(BaseCommand):
     subcmd = "groups_clear"
-    help = "Remove all Bond's devices."
+    help = "Remove all Bond's groups."
     arguments = {
         "--bondid": {"help": "ignore selected Bond and use provided"},
         "--groupid": {"help": "delete single group"},
