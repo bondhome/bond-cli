@@ -6,7 +6,7 @@ class GroupDeleteCommand(object):
     subcmd = "delete"
     help = "Delete Bond's groups."
     arguments = {
-        "--bondid": {"help": "ignore selected Bond and use provided"},
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
         "--force": {
             "help": "force deletion with no input from user",
             "action": "store_true",
@@ -19,7 +19,7 @@ class GroupDeleteCommand(object):
         group.add_argument("--all", help="delete all groups", action="store_true")
 
     def run(self, args):
-        bond_id = args.bondid or BondDatabase.get_assert_selected_bondid()
+        bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
         if args.all:
             if (
                 args.force

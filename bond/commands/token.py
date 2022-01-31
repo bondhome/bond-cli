@@ -26,11 +26,11 @@ class TokenCommand(object):
     help = "Manage token-based authentication."
     arguments = {
         "token": {"help": "Save Bond token to local database", "nargs": "?"},
-        "--bondid": {"help": "ignore selected Bond and use provided"},
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
     }
 
     def run(self, args):
-        bond_id = args.bondid or BondDatabase.get_assert_selected_bondid()
+        bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
         if args.token:
             update_token(args.token, bond_id)
         elif not check_unlocked_token(bond_id):

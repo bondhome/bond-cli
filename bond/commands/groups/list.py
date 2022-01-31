@@ -8,7 +8,7 @@ class GroupsListCommand(object):
     help = "List the selected Bond's groups."
 
     arguments = {
-        "--bondid": {"help": "ignore selected Bond and use provided"},
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
         "-q": {
             "help": "dont print table outline (quiet mode)",
             "action": "store_true",
@@ -16,7 +16,7 @@ class GroupsListCommand(object):
     }
 
     def run(self, args):
-        bond_id = args.bondid or BondDatabase.get_assert_selected_bondid()
+        bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
         group_ids = bond.proto.get(bond_id, topic="groups").get("b", {})
         if not args.q:
             print(f"Groups on {bond_id}:")

@@ -6,7 +6,7 @@ class DeviceDeleteCommand(object):
     subcmd = "delete"
     help = "Delete Bond's devices."
     arguments = {
-        "--bondid": {"help": "ignore selected Bond and use provided"},
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
         "--force": {
             "help": "force deletion with no input from user",
             "action": "store_true",
@@ -15,11 +15,11 @@ class DeviceDeleteCommand(object):
 
     def setup(self, parser):
         group = parser.add_mutually_exclusive_group()
-        group.add_argument("--device_id", help="ID of the device being deleted")
+        group.add_argument("--device-id", help="ID of the device being deleted")
         group.add_argument("--all", help="delete all devices", action="store_true")
 
     def run(self, args):
-        bond_id = args.bondid or BondDatabase.get_assert_selected_bondid()
+        bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
         if args.all:
             if (
                 args.force

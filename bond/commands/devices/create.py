@@ -24,11 +24,11 @@ class DeviceCreateCommand(object):
             "type": int,
             "required": False,
         },
-        "--bondid": {"help": "ignore selected Bond and use provided"},
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
     }
 
     def run(self, args):
-        bond_id = args.bondid or BondDatabase.get_assert_selected_bondid()
+        bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
         properties = {}
         if args.addr:
             properties["addr"] = args.addr

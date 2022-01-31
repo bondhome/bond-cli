@@ -8,19 +8,19 @@ class GroupCreateCommand(object):
     arguments = {
         "--name": {"help": "group name", "required": True},
         "--devices": {"help": "included devices", "required": True},
-        "--groupid": {"help": "group ID (optional)", "required": False},
-        "--bondid": {"help": "ignore selected Bond and use provided"},
+        "--group-id": {"help": "group ID (optional)", "required": False},
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
     }
 
     def run(self, args):
-        bond_id = args.bondid or BondDatabase.get_assert_selected_bondid()
+        bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
         create_group_body = {
             "name": args.name,
             "devices": args.devices.split(","),
         }
 
-        if args.groupid:
-            create_group_body["_id"] = args.groupid
+        if args.group_id:
+            create_group_body["_id"] = args.group_id
 
         rsp = bond.proto.post(
             bond_id,
