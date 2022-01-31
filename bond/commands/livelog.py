@@ -50,6 +50,7 @@ class LivelogCommand(object):
     subcmd = "livelog"
     help = "Start streaming logs"
     arguments = {
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
         "--ip": {"help": "IP of log server"},
         "--port": {"help": "UDP port of log server"},
         "--level": {
@@ -73,7 +74,7 @@ class LivelogCommand(object):
     }
 
     def run(self, args):  # noqa: C901
-        bondid = BondDatabase.get_assert_selected_bondid()
+        bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
 
         def tear_down_livelog():
             try:
