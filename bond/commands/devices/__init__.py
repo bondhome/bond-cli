@@ -5,6 +5,3 @@ class DevicesCommand(object):
     subcmd = "devices"
     help = "Interact with the selected Bond's devices."
     subcommands = [list.DevicesListCommand(), create.DeviceCreateCommand(), delete.DeviceDeleteCommand()]
-
-    def run(self, args):
-        pass
