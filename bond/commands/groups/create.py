@@ -29,3 +29,5 @@ class GroupCreateCommand(object):
         )
         if rsp["s"] > 299:
             print(f"HTTP {rsp['s']} {rsp['b']['_error_msg']}")
+        else:
+            print(f"{rsp['b']['_id']} group created.")
