@@ -34,4 +34,4 @@ class GroupDeleteCommand(object):
             if group_id.startswith("_"):
                 continue
             bond.proto.delete(bond_id, topic=f"groups/{group_id}")
-            print(f"{group_id} device deleted.")
+            print(f"{group_id} group deleted.")
