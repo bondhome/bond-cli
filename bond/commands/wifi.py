@@ -17,7 +17,7 @@ class WifiCommand(object):
     }
 
     def run(self, args):
-        bondid = arsg.bond_id or BondDatabase.get_assert_selected_bondid()
+        bondid = args.bond_id or BondDatabase.get_assert_selected_bondid()
         rsp = bond.proto.put(
             bondid,
             topic="sys/wifi/sta",

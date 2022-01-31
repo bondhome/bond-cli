@@ -22,7 +22,7 @@ class ResetCommand(object):
     }
 
     def run(self, args):
-        bondid = arsg.bond_id or BondDatabase.get_assert_selected_bondid()
+        bondid = args.bond_id or BondDatabase.get_assert_selected_bondid()
         bond.proto.put(bondid, topic="sys/reset", body={"type": args.type})
         # TODO: a response is not expected. When this is fixed in the firmware,
         # check for a success status here
