@@ -6,6 +6,8 @@ class GroupDeleteCommand(object):
     subcmd = "delete"
     help = "Delete Bond's groups."
     arguments = {
+        "group_ids": {"help": "ID of the group(s) being deleted", "nargs": "*"},
+        "--all": {"help": "delete all groups", "action": "store_true"},
         "--bond-id": {"help": "ignore selected Bond and use provided"},
         "--force": {
             "help": "force deletion with no input from user",
@@ -14,11 +16,7 @@ class GroupDeleteCommand(object):
     }
 
     def setup(self, parser):
-        group = parser.add_mutually_exclusive_group()
-        group.add_argument(
-            "--group-ids", help="ID of the group(s) being deleted", nargs="*"
-        )
-        group.add_argument("--all", help="delete all groups", action="store_true")
+        self.parser = parser
 
     def run(self, args):
         bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
@@ -31,11 +29,13 @@ class GroupDeleteCommand(object):
         elif args.group_ids:
             if (
                 args.force
-                or input(f"Delete group(s) {args.group_ids}? [N/y] ").lower() == "y"
+                or input(f"Delete group(s) {', '.join(args.group_ids)}? [N/y] ").lower() == "y"
             ):
                 for group_id in args.group_ids:
                     bond.proto.delete(bond_id, topic=f"groups/{group_id}")
                     print(f"{group_id} group deleted.")
+        else:
+            self.parser.print_help()
 
     def delete_all_groups(self, bond_id):
         groups_ids = bond.proto.get(bond_id, topic="groups").get("b", {})

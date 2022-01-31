@@ -6,6 +6,8 @@ class DeviceDeleteCommand(object):
     subcmd = "delete"
     help = "Delete Bond's devices."
     arguments = {
+        "device_ids": {"help": "ID of the device(s) being deleted", "nargs": "*"},
+        "--all": {"help": "delete all devices", "action": "store_true"},
         "--bond-id": {"help": "ignore selected Bond and use provided"},
         "--force": {
             "help": "force deletion with no input from user",
@@ -14,11 +16,7 @@ class DeviceDeleteCommand(object):
     }
 
     def setup(self, parser):
-        group = parser.add_mutually_exclusive_group()
-        group.add_argument(
-            "--device-ids", help="ID of the device(s) being deleted", nargs="*"
-        )
-        group.add_argument("--all", help="delete all devices", action="store_true")
+        self.parser = parser
 
     def run(self, args):
         bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
@@ -31,11 +29,13 @@ class DeviceDeleteCommand(object):
         elif args.device_ids:
             if (
                 args.force
-                or input(f"Delete device(s) {args.device_ids}? [N/y] ").lower() == "y"
+                or input(f"Delete device(s) {', '.join(args.device_ids)}? [N/y] ").lower() == "y"
             ):
                 for dev_id in args.device_ids:
                     bond.proto.delete(bond_id, topic=f"devices/{dev_id}")
                     print(f"{dev_id} device deleted.")
+        else:
+            self.parser.print_help()
 
     def delete_all_devices(self, bond_id):
         dev_ids = bond.proto.get(bond_id, topic="devices").get("b", {})
