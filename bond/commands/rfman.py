@@ -25,11 +25,10 @@ class RFManCommand(object):
         )
         body = rsp.get("b", {})
         print(
-            "RF Manager settings: Log Signals (%s) | Silence Transmission (%s)"
-            % (body.get("log_signals"), body.get("silence_tx"))
+            f"RF Manager settings: Log Signals ({body.get('log_signals')}) | Silence Transmission ({body.get('silence_tx')})"  # noqa: E501
         )
         if rsp["s"] > 299:
-            print("HTTP %d %s" % (rsp["s"], rsp["b"]["_error_msg"]))
+            print(f"HTTP {rsp['s']} {rsp['b']['_error_msg']}")
 
 
 def register():

@@ -76,14 +76,14 @@ class BackupCommand(object):
         print(rsp)
         if rsp["s"] != 200:
             raise Exception(
-                "Error HTTP %d starting backup: %s", rsp["s"], rsp["b"]["_error_msg"]
+                f"Error HTTP {rsp['s']} starting backup: {rsp['b']['_error_msg']}"
             )
         time.time()
         while True:
             time.sleep(1)
             rsp = bond.proto.get(bondid, topic="sys/backup")
             if rsp["b"]["backup"] == -1:
-                raise Exception("Backup error: %s" % rsp["b"]["error_msg"])
+                raise Exception(f"Backup error: {rsp['b']['error_msg']}")
             if rsp["b"]["backup"] == 2:
                 print("Bond reports backup success.")
                 break
@@ -140,7 +140,7 @@ class RestoreCommand(object):
             if len(file_list) == 0:
                 print("No backups found")
             else:
-                print("Found %d backups: " % len(file_list))
+                print(f"Found {len(file_list)} backups:")
                 for f in get_file_list():
                     print("  " + f["datestr"] + "   " + f["file"])
             return
@@ -164,14 +164,14 @@ class RestoreCommand(object):
         print(rsp)
         if rsp["s"] != 200:
             raise Exception(
-                "Error HTTP %d starting restore: %s", rsp["s"], rsp["b"]["_error_msg"]
+                f"Error HTTP {rsp['s']} starting restore: {rsp['b']['_error_msg']}"
             )
         time.time()
         while True:
             time.sleep(1)
             rsp = bond.proto.get(bondid, topic="sys/backup")
             if rsp["b"]["restore"] == -1:
-                raise Exception("Restore error: %s" % rsp["b"]["error_msg"])
+                raise Exception(f"Restore error: {rsp['b']['error_msg']}")
             if rsp["b"]["restore"] == 2:
                 print("Bond reports restore success!")
                 break

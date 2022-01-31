@@ -82,12 +82,12 @@ class LivelogCommand(object):
             except RequestException:
                 pass
             if args.out != "/dev/null":
-                print("Logs written to %s", args.out)
+                print(f"Logs written to {args.out}")
 
         if args.delete:
             stop_livelog(bondid)
             bond.proto.delete(bondid, topic="debug/syslog")
-            print("Livelog stopped for %s" % bondid)
+            print(f"Livelog stopped for {bondid}")
             return
         if args.level:
             bond.proto.patch(
@@ -106,7 +106,7 @@ class LivelogCommand(object):
             sock, UDP_PORT = listen(my_ip)
             do_livelog(bondid, my_ip, UDP_PORT)
         with open(args.out, "w+") as log:
-            log.write("\n===== %s =====\n" % datetime.datetime.now())
+            log.write(f"\n===== {datetime.datetime.now()} =====\n")
             while True:
                 try:
                     data, addr = sock.recvfrom(1024 * 16)

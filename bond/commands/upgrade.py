@@ -26,7 +26,7 @@ def get_s3_version(target, branch, depth=0):
     rsp = requests.get(url)
     if rsp.status_code != 200:
         raise SystemExit(
-            "Failed to find an upgrade for target %s on branch %s" % (target, branch)
+            f"Failed to find an upgrade for target {target} on branch {branch}"
         )
     return json.loads(rsp.content)["versions"][depth]
 

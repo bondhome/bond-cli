@@ -28,9 +28,8 @@ class SelectCommand(object):
             ]
             if len(matches) == 0:
                 proceed = input(
-                    "%s hasn't been discovered by bond-cli ('bond discover')."
-                    "Proceed with setting it? It may not be reachable. y/N"
-                    % args.bond_id
+                    f"{args.bond_id} hasn't been discovered by bond-cli ('bond discover').\n"
+                    "Proceed with setting it? It may not be reachable. [y/N] "
                 )
                 if proceed.lower() == "y":
                     bond_id = args.bond_id
@@ -48,17 +47,17 @@ class SelectCommand(object):
             BondDatabase.set("selected_bondid", bond_id)
             if args.ip:
                 BondDatabase.set_bond(bond_id, "ip", args.ip)
-                print("Set %s IP %s" % (bond_id, args.ip))
+                print(f"Set {bond_id} IP {args.ip}")
             if args.port:
                 BondDatabase.set_bond(bond_id, "port", args.port)
-                print("Set %s port %s" % (bond_id, args.ip))
-            print("Selected Bond: %s" % BondDatabase().get("selected_bondid"))
+                print(f"Set {bond_id} port {args.ip}")
+            print(f"Selected Bond: {BondDatabase().get('selected_bondid')}")
             token = check_unlocked_token()  # noqa: F841
         elif args.clear:
             BondDatabase().pop("selected_bondid", None)
             print("Cleared selected Bond")
         else:
-            print("Bond selected: " + BondDatabase().get_assert_selected_bondid())
+            print(f"Bond selected: {BondDatabase().get_assert_selected_bondid()}")
 
 
 def register():

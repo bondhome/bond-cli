@@ -12,8 +12,8 @@ class VersionCommand(object):
         rsp = bond.proto.get(bond_id, topic="sys/version")
         body = rsp.get("b", {})
         print(bond_id)
-        print("Target: %s" % body.get("target"))
-        print("Version: %s" % body.get("fw_ver"))
+        print(f"Target: {body.get('target')}")
+        print(f"Version: {body.get('fw_ver')}")
 
 
 def register():
