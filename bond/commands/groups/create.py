@@ -7,7 +7,7 @@ class GroupCreateCommand(object):
     help = "Create a new group."
     arguments = {
         "--name": {"help": "group name", "required": True},
-        "--devices": {"help": "included devices", "required": True, "nargs": "*"},
+        "--device-ids": {"help": "included devices", "required": True, "nargs": "*"},
         "--group-id": {"help": "predefine group ID (optional)", "required": False},
         "--bond-id": {"help": "ignore selected Bond and use provided"},
     }
@@ -16,7 +16,7 @@ class GroupCreateCommand(object):
         bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
         create_group_body = {
             "name": args.name,
-            "devices": args.devices,
+            "devices": args.device_ids,
         }
 
         if args.group_id:
