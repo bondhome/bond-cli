@@ -5,10 +5,9 @@ from bond.database import BondDatabase
 
 class GroupsListCommand(object):
     subcmd = "list"
-    help = "List the selected Bond's groups."
+    help = "List device groups."
 
     arguments = {
-        "--bond-id": {"help": "ignore selected Bond and use provided"},
         "-q": {
             "help": "dont print table outline (quiet mode)",
             "action": "store_true",
@@ -16,20 +15,16 @@ class GroupsListCommand(object):
     }
 
     def run(self, args):
-        bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
-        group_ids = bond.proto.get(bond_id, topic="groups").get("b", {})
-        if not args.q:
-            print(f"Groups on {bond_id}:")
-        with Table(["group_id", "name", "types", "devices"], quiet=args.q) as table:
-            for group_id in group_ids:
-                if group_id.startswith("_"):
-                    continue
-                group = bond.proto.get(bond_id, topic=f"groups/{group_id}").get("b", {})
-                table.add_row(
-                    {
-                        "group_id": group_id,
-                        "name": group.get("name"),
-                        "types": group.get("types"),
-                        "devices": group.get("devices"),
-                    }
-                )
+        groups = {}
+        for bond_id in BondDatabase.get_bonds():
+            try:
+                group_shards = bond.proto.get(bond_id, topic="groups").get("b", {})
+                for shard_id in group_shards.keys():
+                    if shard_id.startswith("_"):
+                        continue
+                    groups[shard_id] = groups.get(shard_id, []) + [bond_id]
+            except Exception:
+                pass
+        table = Table(["group_id", "bonds"], quiet=args.q)
+        for group, bonds in groups.items():
+            table.add_row({"group_id": group, "bonds": ",".join(bonds)})
