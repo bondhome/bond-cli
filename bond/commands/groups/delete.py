@@ -1,3 +1,5 @@
+from requests.exceptions import ConnectTimeout
+
 import bond.proto
 from bond.database import BondDatabase
 
@@ -22,5 +24,5 @@ class GroupDeleteCommand(object):
                         if args.force or input(f"Delete group {shard_id} from {bond_id}? [N/y] ").lower() == "y":
                             bond.proto.delete(bond_id, topic=f"groups/{shard_id}")
                             print(f"{shard_id} group deleted from {bond_id}.")
-            except Exception:
+            except (ConnectTimeout, PermissionError):
                 pass
