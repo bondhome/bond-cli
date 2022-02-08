@@ -1,7 +1,4 @@
-from requests.exceptions import ConnectTimeout
-
 import bond.proto
-from bond.database import BondDatabase
 
 
 class GroupDeleteCommand(object):
@@ -16,13 +13,25 @@ class GroupDeleteCommand(object):
     }
 
     def run(self, args):
-        for bond_id in BondDatabase.get_bonds():
-            try:
-                group_shards = bond.proto.get(bond_id, topic="groups").get("b", {})
-                for shard_id in group_shards.keys():
-                    if shard_id in args.group_ids:
-                        if args.force or input(f"Delete group {shard_id} from {bond_id}? [N/y] ").lower() == "y":
-                            bond.proto.delete(bond_id, topic=f"groups/{shard_id}")
-                            print(f"{shard_id} group deleted from {bond_id}.")
-            except (ConnectTimeout, PermissionError):
-                pass
+        if (
+            args.force
+            or input(f"Delete group(s) {', '.join(args.group_ids)}? [N/y] ").lower()
+            == "y"
+        ):
+            bond.proto.get_all_async(
+                topic="groups",
+                on_success=lambda bond_id, response: delete_group_if_present(
+                    args.group_ids, bond_id, response.get("b", {})
+                ),
+                on_error=lambda _bond_id, _error_msg: None,
+            )
+
+
+def delete_group_if_present(deleted_group_ids, bond_id, group_shards):
+    group_shard_ids = [
+        group_id for group_id in group_shards.keys() if not group_id.startswith("_")
+    ]
+    for deleted_group in deleted_group_ids:
+        if deleted_group in group_shard_ids:
+            bond.proto.delete(bond_id, topic=f"groups/{deleted_group}")
+            print(f"{deleted_group} group deleted from {bond_id}.")
