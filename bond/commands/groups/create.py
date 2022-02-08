@@ -28,12 +28,11 @@ class GroupCreateCommand(object):
 
         for bond_id, device_ids in devices.items():
             create_group_body["devices"] = device_ids
-            rsp = bond.proto.post(
+            bond.proto.request_async(
+                "post",
                 bond_id,
                 topic="groups",
                 body=create_group_body,
+                on_success=lambda b_id, response: print(f"{response['b']['_id']} group created in {b_id}."),
+                on_error=lambda b_id, error_msg: print(f"Error creating group in {b_id}: {error_msg}"),
             )
-            if rsp["s"] > 299:
-                print(f"HTTP {rsp['s']} {rsp['b']['_error_msg']}")
-            else:
-                print(f"{rsp['b']['_id']} group created in {bond_id}.")
