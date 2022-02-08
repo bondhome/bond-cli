@@ -118,7 +118,3 @@ class LivelogCommand(object):
                 except KeyboardInterrupt:
                     tear_down_livelog()
                     break
-
-
-def register():
-    LivelogCommand()

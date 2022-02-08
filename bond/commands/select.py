@@ -58,7 +58,3 @@ class SelectCommand(object):
             print("Cleared selected Bond")
         else:
             print(f"Bond selected: {BondDatabase().get_assert_selected_bondid()}")
-
-
-def register():
-    SelectCommand()

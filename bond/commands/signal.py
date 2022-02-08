@@ -39,7 +39,3 @@ class SignalCommand(object):
         )
         if rsp["s"] > 299:
             print(f"HTTP {rsp['s']} {rsp['b']['_error_msg']}")
-
-
-def register():
-    SignalCommand()
