@@ -1,23 +1,19 @@
-from collections import defaultdict
 from threading import Thread
 
 
 class BaseTransport(object):
-    def get_async(self, *args, **kwargs):
-        kwargs = defaultdict(lambda: lambda x: {}, kwargs)
-        on_success = kwargs["on_success"]
-        del kwargs["on_success"]
-        on_error = kwargs["on_error"]
-        del kwargs["on_error"]
+    def request_async(self, http_method_name, *args, **kwargs):
+        on_success = kwargs.pop("on_success")
+        on_error = kwargs.pop("on_error")
 
         def task():
             try:
-                on_success(self.bondid, self.get(*args, **kwargs))
+                on_success(
+                    self.bondid, getattr(self, http_method_name)(*args, **kwargs)
+                )
             except Exception as e:
                 on_error(self.bondid, e)
 
         t = Thread(target=task)
         t.start()
         return t
-
-    # TODO: other methods

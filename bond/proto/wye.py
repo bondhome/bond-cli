@@ -40,7 +40,7 @@ def delete(bondid, **kwargs):
     return mk_transport(bondid).delete(**kwargs)
 
 
-def get_async(bondid, **kwargs):
+def request_async(http_method_name, bondid, **kwargs):
     caller_on_success = kwargs["on_success"]
 
     def success_wrapper(bondid, rsp):
@@ -51,8 +51,18 @@ def get_async(bondid, **kwargs):
             caller_on_success(bondid, rsp)
 
     kwargs["on_success"] = success_wrapper
-    return mk_transport(bondid).get_async(**kwargs)
+    try:
+        return mk_transport(bondid).request_async(http_method_name, **kwargs)
+    except KeyError:
+        kwargs["on_error"](
+            bondid,
+            Exception(
+                f"{bondid} hasn't been discovered by bond-cli ('bond discover')."
+            ),
+        )
 
 
 def get_all_async(**kwargs):
-    return [get_async(bondid, **kwargs) for bondid in BondDatabase.get_bonds()]
+    return [
+        request_async("get", bondid, **kwargs) for bondid in BondDatabase.get_bonds()
+    ]
