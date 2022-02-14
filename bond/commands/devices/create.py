@@ -51,4 +51,4 @@ class DeviceCreateCommand(object):
         if rsp["s"] > 299:
             print(f"HTTP {rsp['s']} {rsp['b']['_error_msg']}")
         else:
-            print(f"{rsp['b']['_id']} device created.")
+            print(f"{rsp['b']['_id']}")
