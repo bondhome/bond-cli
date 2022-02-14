@@ -4,6 +4,7 @@ from bond.cli.main import load_commands, execute_from_command_line
 from bond.commands.backup import BackupCommand, RestoreCommand
 from bond.commands.devices import DevicesCommand
 from bond.commands.discover import DiscoverCommand
+from bond.commands.group_shards import GroupShardsCommand
 from bond.commands.groups import GroupsCommand
 from bond.commands.list import BondListCommand
 from bond.commands.livelog import LivelogCommand
@@ -25,6 +26,7 @@ COMMANDS = [
     BondListCommand(),
     DevicesCommand(),
     GroupsCommand(),
+    GroupShardsCommand(),
     LivelogCommand(),
     SignalCommand(),
     ResetCommand(),
