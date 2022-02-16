@@ -15,7 +15,7 @@ from bond.commands.signal import SignalCommand
 from bond.commands.token import TokenCommand
 from bond.commands.upgrade import UpgradeCommand
 from bond.commands.version import VersionCommand
-from bond.commands.wifi import WifiCommand, WifiShutdownCommand
+from bond.commands.wifi import WifiCommand
 
 COMMANDS = [
     DiscoverCommand(),
@@ -30,7 +30,6 @@ COMMANDS = [
     ResetCommand(),
     RebootCommand(),
     WifiCommand(),
-    WifiShutdownCommand(),
     UpgradeCommand(),
     RFManCommand(),
     BackupCommand(),
