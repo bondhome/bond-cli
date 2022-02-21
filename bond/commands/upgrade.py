@@ -101,11 +101,11 @@ class UpgradeCommand(object):
             "help": "force upgrade with no input from user",
             "action": "store_true",
         },
-        "--bondid": {"help": "ignore selected Bond and use provided"},
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
     }
 
     def run(self, args):
-        bond_id = args.bondid or BondDatabase.get_assert_selected_bondid()
+        bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
         print("Connecting to BOND...")
         sys_version = bond.proto.get(bond_id, topic="sys/version")["b"]
         target = sys_version["target"]

@@ -13,10 +13,11 @@ class WifiCommand(object):
             "required": True,
         },
         "--password": {"help": "The password", "required": True},
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
     }
 
     def run(self, args):
-        bondid = BondDatabase.get_assert_selected_bondid()
+        bondid = args.bond_id or BondDatabase.get_assert_selected_bondid()
         rsp = bond.proto.put(
             bondid,
             topic="sys/wifi/sta",
@@ -32,10 +33,12 @@ class WifiCommand(object):
 class WifiShutdownCommand(object):
     subcmd = "wifi_shutdown"
     help = "Shutdown WiFi until reboot (requires fw >= v2.11.4)"
-    arguments = {}
+    arguments = {
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
+    }
 
     def run(self, args):
-        bondid = BondDatabase.get_assert_selected_bondid()
+        bondid = args.bond_id or BondDatabase.get_assert_selected_bondid()
         rsp = bond.proto.patch(
             bondid,
             topic="debug/wifi",

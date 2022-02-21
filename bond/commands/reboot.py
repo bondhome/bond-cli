@@ -7,10 +7,13 @@ from bond.database import BondDatabase
 class RebootCommand(object):
     subcmd = "reboot"
     help = """Reboot a Bond. No reset is performed."""
-    arguments = {"--cold": {"help": "simulate cold boot", "action": "store_true"}}
+    arguments = {
+        "--cold": {"help": "simulate cold boot", "action": "store_true"},
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
+    }
 
     def run(self, args):
-        bondid = BondDatabase.get_assert_selected_bondid()
+        bondid = args.bond_id or BondDatabase.get_assert_selected_bondid()
         try:
             body = {}
             if args.cold:

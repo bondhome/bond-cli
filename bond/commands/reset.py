@@ -17,11 +17,12 @@ class ResetCommand(object):
                        know what you're doing! You probably don't need this unless
                        you're developing firmware for the Bond.""",
             "choices": ["setup", "factory", "rescue"],
-        }
+        },
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
     }
 
     def run(self, args):
-        bondid = BondDatabase.get_assert_selected_bondid()
+        bondid = args.bond_id or BondDatabase.get_assert_selected_bondid()
         bond.proto.put(bondid, topic="sys/reset", body={"type": args.type})
         # TODO: a response is not expected. When this is fixed in the firmware,
         # check for a success status here

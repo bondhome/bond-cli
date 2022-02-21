@@ -50,6 +50,7 @@ class LivelogCommand(object):
     subcmd = "livelog"
     help = "Start streaming logs"
     arguments = {
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
         "--ip": {"help": "IP of log server"},
         "--port": {"help": "UDP port of log server"},
         "--level": {
@@ -73,11 +74,11 @@ class LivelogCommand(object):
     }
 
     def run(self, args):  # noqa: C901
-        bondid = BondDatabase.get_assert_selected_bondid()
+        bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
 
         def tear_down_livelog():
             try:
-                stop_livelog(bondid)
+                stop_livelog(bond_id)
                 print("Livelog session stopped")
             except RequestException:
                 pass
@@ -85,26 +86,26 @@ class LivelogCommand(object):
                 print(f"Logs written to {args.out}")
 
         if args.delete:
-            stop_livelog(bondid)
-            bond.proto.delete(bondid, topic="debug/syslog")
-            print(f"Livelog stopped for {bondid}")
+            stop_livelog(bond_id)
+            bond.proto.delete(bond_id, topic="debug/syslog")
+            print(f"Livelog stopped for {bond_id}")
             return
         if args.level:
             bond.proto.patch(
-                bondid, topic="debug/syslog", body={"lvl": LEVEL_MAP[args.level]}
+                bond_id, topic="debug/syslog", body={"lvl": LEVEL_MAP[args.level]}
             )
         if args.subsys:
             body = {"subsys": args.subsys}
             if args.subsys_level:
                 body["lvl"] = LEVEL_MAP[args.subsys_level]
-            bond.proto.patch(bondid, topic="debug/syslog", body=body)
+            bond.proto.patch(bond_id, topic="debug/syslog", body=body)
 
         if args.ip:
             do_livelog(bond, args.ip, int(args.port))
         else:
-            my_ip = get_my_ip(BondDatabase.get_bonds()[bondid]["ip"])
+            my_ip = get_my_ip(BondDatabase.get_bonds()[bond_id]["ip"])
             sock, UDP_PORT = listen(my_ip)
-            do_livelog(bondid, my_ip, UDP_PORT)
+            do_livelog(bond_id, my_ip, UDP_PORT)
         with open(args.out, "w+") as log:
             log.write(f"\n===== {datetime.datetime.now()} =====\n")
             while True:

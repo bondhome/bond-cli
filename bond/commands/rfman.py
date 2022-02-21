@@ -14,10 +14,11 @@ class RFManCommand(object):
             "help": "Log all signals transmitted by the Bond on BPUP and MQTT transports",
             "action": "store_true",
         },
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
     }
 
     def run(self, args):
-        bondid = BondDatabase.get_assert_selected_bondid()
+        bondid = args.bond_id or BondDatabase.get_assert_selected_bondid()
         rsp = bond.proto.patch(
             bondid,
             topic="debug/rfman",

@@ -24,11 +24,11 @@ class DeviceCreateCommand(object):
             "type": int,
             "required": False,
         },
-        "--bondid": {"help": "ignore selected Bond and use provided"},
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
     }
 
     def run(self, args):
-        bond_id = args.bondid or BondDatabase.get_assert_selected_bondid()
+        bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
         properties = {}
         if args.addr:
             properties["addr"] = args.addr
@@ -50,3 +50,5 @@ class DeviceCreateCommand(object):
         )
         if rsp["s"] > 299:
             print(f"HTTP {rsp['s']} {rsp['b']['_error_msg']}")
+        else:
+            print(f"{rsp['b']['_id']} device created.")

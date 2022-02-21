@@ -60,11 +60,13 @@ def wait_upload(timeout=None):
 class BackupCommand(object):
     subcmd = "backup"
     help = """Backup a Bond"""
-    arguments = {}
+    arguments = {
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
+    }
 
     def run(self, args):
         start_daemon(4444)
-        bondid = BondDatabase.get_assert_selected_bondid()
+        bondid = args.bond_id or BondDatabase.get_assert_selected_bondid()
         timestamp = str(int(time.time()))
         body = {
             "backup": 1,
@@ -132,6 +134,7 @@ class RestoreCommand(object):
             "help": "Only for test purposes. May cause unexpected behavior.",
             "action": "store_true",
         },
+        "--bond-id": {"help": "ignore selected Bond and use provided"},
     }
 
     def run(self, args):  # noqa: C901
@@ -152,7 +155,7 @@ class RestoreCommand(object):
             args.file = file_list[-1]["file"]
 
         start_daemon(4444)
-        bondid = BondDatabase.get_assert_selected_bondid()
+        bondid = args.bond_id or BondDatabase.get_assert_selected_bondid()
         # timestamp = str(int(time.time()))
         body = {
             "restore": 1,
