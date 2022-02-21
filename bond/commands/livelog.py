@@ -8,7 +8,6 @@ import time
 from requests.exceptions import RequestException
 
 import bond.proto
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
 
 LEVEL_MAP = {"warn": 2, "info": 3, "debug": 4, "trace": 5}
@@ -47,7 +46,7 @@ def auto_int(string: str) -> int:
     return int(string, 0)
 
 
-class LivelogCommand(BaseCommand):
+class LivelogCommand(object):
     subcmd = "livelog"
     help = "Start streaming logs"
     arguments = {
@@ -83,12 +82,12 @@ class LivelogCommand(BaseCommand):
             except RequestException:
                 pass
             if args.out != "/dev/null":
-                print("Logs written to %s", args.out)
+                print(f"Logs written to {args.out}")
 
         if args.delete:
             stop_livelog(bondid)
             bond.proto.delete(bondid, topic="debug/syslog")
-            print("Livelog stopped for %s" % bondid)
+            print(f"Livelog stopped for {bondid}")
             return
         if args.level:
             bond.proto.patch(
@@ -107,7 +106,7 @@ class LivelogCommand(BaseCommand):
             sock, UDP_PORT = listen(my_ip)
             do_livelog(bondid, my_ip, UDP_PORT)
         with open(args.out, "w+") as log:
-            log.write("\n===== %s =====\n" % datetime.datetime.now())
+            log.write(f"\n===== {datetime.datetime.now()} =====\n")
             while True:
                 try:
                     data, addr = sock.recvfrom(1024 * 16)

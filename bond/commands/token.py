@@ -1,5 +1,4 @@
 import bond.proto
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
 
 
@@ -22,7 +21,7 @@ def check_unlocked_token(bond_id=None):
     return token is not None
 
 
-class TokenCommand(BaseCommand):
+class TokenCommand(object):
     subcmd = "token"
     help = "Manage token-based authentication."
     arguments = {

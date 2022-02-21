@@ -1,9 +1,8 @@
 import bond.proto
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
 
 
-class SignalCommand(BaseCommand):
+class SignalCommand(object):
     subcmd = "signal"
     help = "Transmit a signal. [Bridge only]"
     arguments = {
@@ -39,7 +38,7 @@ class SignalCommand(BaseCommand):
             },
         )
         if rsp["s"] > 299:
-            print("HTTP %d %s" % (rsp["s"], rsp["b"]["_error_msg"]))
+            print(f"HTTP {rsp['s']} {rsp['b']['_error_msg']}")
 
 
 def register():

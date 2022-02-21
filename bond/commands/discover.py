@@ -1,11 +1,10 @@
 import time
 
 from bond.cli.table import Table
-from bond.commands.base_command import BaseCommand
 from bond.proto.mdns import Scanner
 
 
-class DiscoverCommand(BaseCommand):
+class DiscoverCommand(object):
     subcmd = "discover"
     help = "Discover Bonds on local network."
     arguments = {

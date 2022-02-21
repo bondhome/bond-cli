@@ -1,9 +1,8 @@
 import bond.proto
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
 
 
-class VersionCommand(BaseCommand):
+class VersionCommand(object):
     subcmd = "version"
     help = "Get firmware version and target of the selected Bond."
     arguments = {"--bondid": {"help": "ignore selected Bond and use provided"}}
@@ -13,8 +12,8 @@ class VersionCommand(BaseCommand):
         rsp = bond.proto.get(bond_id, topic="sys/version")
         body = rsp.get("b", {})
         print(bond_id)
-        print("Target: %s" % body.get("target"))
-        print("Version: %s" % body.get("fw_ver"))
+        print(f"Target: {body.get('target')}")
+        print(f"Version: {body.get('fw_ver')}")
 
 
 def register():

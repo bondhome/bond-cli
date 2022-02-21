@@ -1,9 +1,8 @@
 from bond.cli.table import Table
-from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
 
 
-class ListCommand(BaseCommand):
+class BondListCommand(object):
     subcmd = "list"
     help = "List Bonds in local database."
     arguments = {
@@ -23,7 +22,3 @@ class ListCommand(BaseCommand):
                 table.add_row(
                     {"bondid": bondid, "ip": b.get("ip"), "token": b.get("token")}
                 )
-
-
-def register():
-    ListCommand()

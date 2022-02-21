@@ -1,29 +1,38 @@
 import argparse
-import importlib
 
-from bond.cli.console import console_terminate  # noqa: F401
-
-_parser = argparse.ArgumentParser(prog="bond")
-_subparsers = _parser.add_subparsers(dest="subparser_name")
-_parser.set_defaults(func=lambda x: None)
+main_parser = argparse.ArgumentParser(prog="bond")
+main_subparsers = main_parser.add_subparsers()
+main_parser.set_defaults(func=lambda _: main_parser.print_help())
 
 
-def load_commands(COMMANDS):
-    for COMMAND in COMMANDS:
-        command_module = importlib.import_module("bond.commands." + COMMAND)
-        command_module.register()
+def load_commands(commands):
+    for command in commands:
+        setup_command(command, main_subparsers)
 
 
-def register(command):
-    name = str(command)
-    help = command.help if hasattr(command, "help") else None
-    parser_a = _subparsers.add_parser(name, help=help)
-    parser_a.set_defaults(func=command.run)
+def setup_command(command, subparsers):
+    help_text = command.help if hasattr(command, "help") else None
+    cmd_parser = subparsers.add_parser(command.subcmd, help=help_text)
+
+    if hasattr(command, "run"):
+        cmd_parser.set_defaults(func=command.run)
+    else:
+        cmd_parser.set_defaults(func=lambda _: cmd_parser.print_help())
+
+    if hasattr(command, "setup"):
+        command.setup(cmd_parser)
+
     if hasattr(command, "arguments"):
         for arg, config in command.arguments.items():
-            parser_a.add_argument(arg, **config)
+            cmd_parser.add_argument(arg, **config)
+
+    if hasattr(command, "subcommands"):
+        subcmd_subparser = cmd_parser.add_subparsers()
+        for cmd in command.subcommands:
+            setup_command(cmd, subcmd_subparser)
 
 
 def execute_from_command_line(argv):
-    args = _parser.parse_args()
-    args.func(args)
+    args = main_parser.parse_args()
+    if args.func:
+        args.func(args)
