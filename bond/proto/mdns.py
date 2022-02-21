@@ -28,7 +28,7 @@ class Scanner(object):
     def __init__(self, on_success):
         self.zeroconf = Zeroconf()
         self.listener = Listener(on_success=on_success)
-        browser = ServiceBrowser(self.zeroconf, "_bond._tcp.local.", self.listener)    # noqa: F841
+        _browser = ServiceBrowser(self.zeroconf, "_bond._tcp.local.", self.listener)  # noqa: F841
 
     def __del__(self):
         del self.listener

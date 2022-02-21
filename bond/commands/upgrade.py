@@ -5,9 +5,8 @@ import time
 import requests
 
 import bond.proto
+from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
-
-from .base_command import BaseCommand
 
 
 def register():
@@ -99,12 +98,17 @@ class UpgradeCommand(BaseCommand):
             "type": int,
             "default": 0,
         },
+        "--force": {
+            "help": "force upgrade with no input from user",
+            "action": "store_true",
+        },
+        "--bondid": {"help": "ignore selected Bond and use provided"},
     }
 
     def run(self, args):
-        bondid = BondDatabase.get_assert_selected_bondid()
+        bond_id = args.bondid or BondDatabase.get_assert_selected_bondid()
         print("Connecting to BOND...")
-        sys_version = bond.proto.get(bondid, topic="sys/version")["b"]
+        sys_version = bond.proto.get(bond_id, topic="sys/version")["b"]
         target = sys_version["target"]
         current_ver = sys_version["fw_ver"]
         print(f"Detected Target: \t{target}")
@@ -133,7 +137,7 @@ class UpgradeCommand(BaseCommand):
         print(f"Installing Version: \t{new_ver}")
         if new_ver == current_ver:
             print("WARNING: Versions are identical.")
-        if input("Are you sure? [N/y] ").lower() != "y":
+        if not args.force and input("Are you sure? [N/y] ").lower() != "y":
             raise SystemExit("Pfew. That was close. Aborting!")
         print("Requesting upgrade...")
-        do_upgrade(bondid, version_obj)
+        do_upgrade(bond_id, version_obj)

@@ -1,6 +1,7 @@
 import argparse
 import importlib
-from .console import console_terminate   # noqa: F401
+
+from bond.cli.console import console_terminate  # noqa: F401
 
 _parser = argparse.ArgumentParser(prog="bond")
 _subparsers = _parser.add_subparsers(dest="subparser_name")

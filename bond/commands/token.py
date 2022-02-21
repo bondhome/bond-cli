@@ -1,7 +1,6 @@
 import bond.proto
+from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
-
-from .base_command import BaseCommand
 
 
 def update_token(token, bond_id=None):
@@ -10,7 +9,7 @@ def update_token(token, bond_id=None):
     if bond_id not in bonds.keys():
         bonds[bond_id] = dict()
     bonds[bond_id]["token"] = token
-    print("Updated token for %s" % bond_id)
+    print(f"Updated token for {bond_id}")
     BondDatabase.set("bonds", bonds)
 
 
@@ -26,19 +25,21 @@ def check_unlocked_token(bond_id=None):
 class TokenCommand(BaseCommand):
     subcmd = "token"
     help = "Manage token-based authentication."
-    arguments = {"token": {"help": "Save Bond token to local database", "nargs": "?"}}
+    arguments = {
+        "token": {"help": "Save Bond token to local database", "nargs": "?"},
+        "--bondid": {"help": "ignore selected Bond and use provided"},
+    }
 
     def run(self, args):
-        bond_id = BondDatabase.get_assert_selected_bondid()
+        bond_id = args.bondid or BondDatabase.get_assert_selected_bondid()
         if args.token:
             update_token(args.token, bond_id)
         elif not check_unlocked_token(bond_id):
-            print("%s's token is not unlocked." % bond_id)
+            print(f"{bond_id}'s token is not unlocked.")
             stored_token = BondDatabase.get_bond(bond_id).get("token")
             if stored_token:
                 print(
-                    "There's already a token for %s in your local database: %s."
-                    % (bond_id, stored_token)
+                    f"There's already a token for {bond_id} in your local database: {stored_token}."
                 )
                 print("If this token is obsolete, you will need to set the new token.")
                 print(

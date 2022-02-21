@@ -1,7 +1,6 @@
+from bond.commands.base_command import BaseCommand
+from bond.commands.token import check_unlocked_token
 from bond.database import BondDatabase
-
-from .base_command import BaseCommand
-from .token import check_unlocked_token
 
 
 class SelectCommand(BaseCommand):
@@ -55,10 +54,12 @@ class SelectCommand(BaseCommand):
                 BondDatabase.set_bond(bond_id, "port", args.port)
                 print("Set %s port %s" % (bond_id, args.ip))
             print("Selected Bond: %s" % BondDatabase().get("selected_bondid"))
-            token = check_unlocked_token()    # noqa: F841
+            token = check_unlocked_token()  # noqa: F841
         elif args.clear:
             BondDatabase().pop("selected_bondid", None)
             print("Cleared selected Bond")
+        else:
+            print("Bond selected: " + BondDatabase().get_assert_selected_bondid())
 
 
 def register():

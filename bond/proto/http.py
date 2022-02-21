@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from .base_transport import BaseTransport
+from bond.proto.base_transport import BaseTransport
 
 
 class HTTP_Transport(BaseTransport):

@@ -1,8 +1,6 @@
 import bond.proto
+from bond.commands.base_command import BaseCommand
 from bond.database import BondDatabase
-
-from .base_command import BaseCommand
-from .devices import DevicesCommand
 
 
 class DeviceCreateCommand(BaseCommand):
@@ -11,7 +9,10 @@ class DeviceCreateCommand(BaseCommand):
     arguments = {
         "--name": {"help": "device name", "required": True},
         "--template": {"help": "template name (RCF84, A1, etc.)", "required": True},
-        "--location": {"help": "location name (Bedroom, Living Room, etc.)", "required": True},
+        "--location": {
+            "help": "location name (Bedroom, Living Room, etc.)",
+            "required": True,
+        },
         "--addr": {"help": "device address (binary)", "required": False},
         "--freq": {"help": "signal frequency (kHz)", "type": int, "required": False},
         "--bps": {
@@ -24,10 +25,11 @@ class DeviceCreateCommand(BaseCommand):
             "type": int,
             "required": False,
         },
+        "--bondid": {"help": "ignore selected Bond and use provided"},
     }
 
     def run(self, args):
-        bondid = BondDatabase.get_assert_selected_bondid()
+        bond_id = args.bondid or BondDatabase.get_assert_selected_bondid()
         properties = {}
         if args.addr:
             properties["addr"] = args.addr
@@ -38,7 +40,7 @@ class DeviceCreateCommand(BaseCommand):
         if args.zero_gap:
             properties["zero_gap"] = args.zero_gap
         rsp = bond.proto.post(
-            bondid,
+            bond_id,
             topic="devices",
             body={
                 "name": args.name,
@@ -49,7 +51,6 @@ class DeviceCreateCommand(BaseCommand):
         )
         if rsp["s"] > 299:
             print("HTTP %d %s" % (rsp["s"], rsp["b"]["_error_msg"]))
-        DevicesCommand().run(None)
 
 
 def register():
