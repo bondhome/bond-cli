@@ -26,7 +26,3 @@ class ResetCommand(object):
         bond.proto.put(bondid, topic="sys/reset", body={"type": args.type})
         # TODO: a response is not expected. When this is fixed in the firmware,
         # check for a success status here
-
-
-def register():
-    ResetCommand()

@@ -18,7 +18,3 @@ class DiscoverCommand(object):
             time.sleep(10)
         except KeyboardInterrupt:
             pass
-
-
-def register():
-    DiscoverCommand()

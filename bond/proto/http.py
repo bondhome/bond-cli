@@ -50,5 +50,5 @@ class HTTP_Transport(BaseTransport):
         except:  # noqa: E722 - ignore bare except
             body = None
         if rsp.status_code == 401:
-            raise SystemExit("Invalid token! Have you set it with 'bond token' yet?")
+            raise PermissionError("Invalid token! Have you set it with 'bond token' yet?")
         return {"s": rsp.status_code, "b": body, "bondid": self.bondid}

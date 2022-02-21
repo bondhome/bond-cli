@@ -45,7 +45,3 @@ class TokenCommand(object):
                     "You can set it manually with 'bond token <token>', or unlock the token and run 'bond token'"
                 )
                 print("(tip: the token is unlocked for a short period after a reboot)")
-
-
-def register():
-    TokenCommand()

@@ -1,46 +1,37 @@
 import bond.proto
-from bond.database import BondDatabase
 
 
 class GroupDeleteCommand(object):
     subcmd = "delete"
-    help = "Delete Bond's groups."
+    help = "Delete device group(s)."
     arguments = {
-        "group_ids": {"help": "ID of the group(s) being deleted", "nargs": "*"},
-        "--all": {"help": "delete all groups", "action": "store_true"},
-        "--bond-id": {"help": "ignore selected Bond and use provided"},
+        "group_ids": {"help": "ID of the group(s) being deleted", "nargs": "+"},
         "--force": {
             "help": "force deletion with no input from user",
             "action": "store_true",
         },
     }
 
-    def setup(self, parser):
-        self.parser = parser
-
     def run(self, args):
-        bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
-        if args.all:
-            if (
-                args.force
-                or input(f"Delete all groups from {bond_id}? [N/y] ").lower() == "y"
-            ):
-                self.delete_all_groups(bond_id)
-        elif args.group_ids:
-            if (
-                args.force
-                or input(f"Delete group(s) {', '.join(args.group_ids)}? [N/y] ").lower() == "y"
-            ):
-                for group_id in args.group_ids:
-                    bond.proto.delete(bond_id, topic=f"groups/{group_id}")
-                    print(f"{group_id} group deleted.")
-        else:
-            self.parser.print_help()
+        if (
+            args.force
+            or input(f"Delete group(s) {', '.join(args.group_ids)}? [N/y] ").lower()
+            == "y"
+        ):
+            bond.proto.get_all_async(
+                topic="groups",
+                on_success=lambda bond_id, response: delete_group_if_present(
+                    args.group_ids, bond_id, response.get("b", {})
+                ),
+                on_error=lambda _bond_id, _error_msg: None,
+            )
 
-    def delete_all_groups(self, bond_id):
-        groups_ids = bond.proto.get(bond_id, topic="groups").get("b", {})
-        for group_id in groups_ids:
-            if group_id.startswith("_"):
-                continue
-            bond.proto.delete(bond_id, topic=f"groups/{group_id}")
-            print(f"{group_id} group deleted.")
+
+def delete_group_if_present(deleted_group_ids, bond_id, group_shards):
+    group_shard_ids = [
+        group_id for group_id in group_shards.keys() if not group_id.startswith("_")
+    ]
+    for deleted_group in deleted_group_ids:
+        if deleted_group in group_shard_ids:
+            bond.proto.delete(bond_id, topic=f"groups/{deleted_group}")
+            print(f"{deleted_group} group deleted from {bond_id}.")

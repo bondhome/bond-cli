@@ -14,7 +14,3 @@ class VersionCommand(object):
         print(bond_id)
         print(f"Target: {body.get('target')}")
         print(f"Version: {body.get('fw_ver')}")
-
-
-def register():
-    VersionCommand()

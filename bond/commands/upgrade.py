@@ -8,10 +8,6 @@ import bond.proto
 from bond.database import BondDatabase
 
 
-def register():
-    UpgradeCommand()
-
-
 def get_branch_string(branch, target):
     if branch in ("alpha", "beta", "master"):
         return f"{branch}-{target}"
