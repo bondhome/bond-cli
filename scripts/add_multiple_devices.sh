@@ -77,7 +77,7 @@ echo "Adding $deviceName (1 to $quantity) with template $template to $bondID"
 
 for (( i=1; i<=$quantity; i++ )); do
   name="$deviceName $(printf %0*d ${#quantity} $i)"
-  bond device_create --name "$name" --location "$location" --template "$template"
+  bond devices create --name "$name" --location "$location" --template "$template"
 done
 
 echo "Done!"
