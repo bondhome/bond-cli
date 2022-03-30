@@ -12,7 +12,7 @@ class Table(object):
         self.print_header()
 
     def print_tabbed(self, lst):
-        separator = "" if self.quiet else "|"
+        separator = "" if self.quiet else "| "
 
         print("", end=separator)
 
@@ -23,14 +23,18 @@ class Table(object):
 
     def print_border(self):
         if not self.quiet:
-            print("-" * ((self.col_width + 1) * len(self.header) + 1))
+            print(" " + "-" * ((self.col_width + 1) * len(self.header) + 2))
 
     def print_header(self):
-        self.print_border()
+        if not self.quiet:
+            self.print_border()
+
         self.print_tabbed(self.header)
 
         if not self.quiet:
-            self.print_tabbed([("-" * self.col_width) for _h in self.header])
+            self.print_tabbed(
+                [("-" * (self.col_width - 1)) + " " for _h in self.header]
+            )
 
     def add_row(self, row):
         if self.open:
