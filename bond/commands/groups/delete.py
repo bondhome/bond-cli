@@ -25,7 +25,7 @@ class GroupDeleteCommand(object):
 
     def run_on_all_bonds(self, args):
         if args.all:
-            if args.force or input(f"Delete ALL groups? [N/y] ").lower() == "y":
+            if args.force or input("Delete ALL groups? [N/y] ").lower() == "y":
                 bond.proto.get_all_async(
                     topic="groups",
                     on_success=lambda bond_id, response: delete_groups_from_bond(bond_id, response.get("b", {}).keys()),
