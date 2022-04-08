@@ -75,6 +75,26 @@ bond devices create --name "Formidable Fan" --location "Bedroom" --template A1 -
 
 You can then see the fan on your Bond Home app.
 
+## Device Groups
+
+Create a device group:
+
+```bash
+bond groups create --name "All Shades" <BOND1_ID>:<DEVICE1_ID> <BOND2_ID>:<DEVICE1_ID> <BOND2_ID>:<DEVICE2_ID> 
+```
+
+List the existing device groups:
+
+```bash
+bond groups list
+```
+
+List the device groups on a single Bond (may not represent the whole group):
+
+```bash
+bond groups list --bond-id <BOND_ID>
+```
+
 ## Live Logging
 
 You can also start a livelog:
