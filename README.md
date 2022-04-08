@@ -62,7 +62,7 @@ bond version
 List its devices:
 
 ```bash
-bond devices
+bond devices list
 ```
 
 ## Injecting Devices
@@ -70,7 +70,7 @@ bond devices
 Create a template device:
 
 ```bash
-bond device_create --name "Formidable Fan" --template A1 --addr 101 --freq 300000 --bps 1000 --zero_gap 1234
+bond devices create --name "Formidable Fan" --location "Bedroom" --template A1 --addr 101 --freq 300000 --bps 1000 --zero_gap 1234
 ```
 
 You can then see the fan on your Bond Home app.
