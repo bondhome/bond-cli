@@ -59,13 +59,7 @@ Check its firmware version:
 bond version
 ```
 
-List its devices:
-
-```bash
-bond devices list
-```
-
-## Injecting Devices
+## Device Management
 
 Create a template device:
 
@@ -74,6 +68,18 @@ bond devices create --name "Formidable Fan" --location "Bedroom" --template A1 -
 ```
 
 You can then see the fan on your Bond Home app.
+
+List existing devices:
+
+```bash
+bond devices list
+```
+
+Delete one or more devices:
+
+```bash
+bond devices delete <DEVICE1_ID> <DEVICE2_ID>
+```
 
 ## Device Groups
 
