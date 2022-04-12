@@ -17,8 +17,18 @@ class BondListCommand(object):
         else:
             table = Table(["bondid", "ip", "token"], quiet=args.q)
             bonds = BondDatabase.get_bonds()
+            selected_bond = BondDatabase().get("selected_bondid")
             for bondid in bonds.keys():
                 b = bonds[bondid]
+                bond_id_display = (
+                    bondid + " <-----"
+                    if not args.q and bondid == selected_bond
+                    else bondid
+                )
                 table.add_row(
-                    {"bondid": bondid, "ip": b.get("ip"), "token": b.get("token")}
+                    {
+                        "bondid": bond_id_display,
+                        "ip": b.get("ip"),
+                        "token": b.get("token"),
+                    }
                 )
