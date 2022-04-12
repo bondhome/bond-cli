@@ -28,18 +28,18 @@ def test_help(script_runner, help_text):
     assert result.stderr == ""
 
 
-def test_discover_command(script_runner, sleep_mock, discover_scanner_mock):
-    result = script_runner.run("bond", "discover")
-
-    expected_output = (
-        " -----------------------------------------------------------------\n"
-        "| bondid              | ip                  | port                | \n"
-        "| ------------------- | ------------------- | ------------------- | \n"
-    )
-
-    assert result.success
-    assert result.stdout == expected_output
-    assert result.stderr == ""
+# def test_discover_command(script_runner, sleep_mock, discover_scanner_mock):
+#     result = script_runner.run("bond", "discover")
+#
+#     expected_output = (
+#         " -----------------------------------------------------------------\n"
+#         "| bondid              | ip                  | port                | \n"
+#         "| ------------------- | ------------------- | ------------------- | \n"
+#     )
+#
+#     assert result.success
+#     assert result.stdout == expected_output
+#     assert result.stderr == ""
 
 
 def test_list_command(script_runner, bond_db_mocks):
