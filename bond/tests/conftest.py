@@ -44,11 +44,13 @@ def discover_scanner_mock(mocker):
 def help_text():
     return (
         "usage: bond [-h]\n"
-        "            {discover,select,version,token,list,devices,groups,livelog,signal,reset,reboot,wifi,upgrade,rfman,backup,restore}\n"
+        "            {discover,select,version,token,list,devices,groups,livelog,signal,reset,reboot,wifi,upgrade,rfman,"
+        "backup,restore}\n"
         "            ...\n"
         "\n"
         "positional arguments:\n"
-        "  {discover,select,version,token,list,devices,groups,livelog,signal,reset,reboot,wifi,upgrade,rfman,backup,restore}\n"
+        "  {discover,select,version,token,list,devices,groups,livelog,signal,reset,reboot,wifi,upgrade,rfman,backup,"
+        "restore}\n"
         "    discover            Discover Bonds on local network.\n"
         "    select              Select a single Bond to interact with, If the token of\n"
         "                        this Bond is unlocked, it will be set. (The easiest\n"
