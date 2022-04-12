@@ -72,6 +72,6 @@ def help_text():
         "    backup              Backup a Bond\n"
         "    restore             Restore a Bond.\n"
         "\n"
-        "options:\n"
+        "optional arguments:\n"
         "  -h, --help            show this help message and exit\n"
     )
