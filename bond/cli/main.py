@@ -12,7 +12,8 @@ def load_commands(commands):
 
 def setup_command(command, subparsers):
     help_text = command.help if hasattr(command, "help") else None
-    cmd_parser = subparsers.add_parser(command.subcmd, help=help_text)
+    description_text = command.description if hasattr(command, "description") else None
+    cmd_parser = subparsers.add_parser(command.subcmd, help=help_text, description=description_text)
 
     if hasattr(command, "run"):
         cmd_parser.set_defaults(func=command.run)

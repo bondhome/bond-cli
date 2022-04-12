@@ -59,21 +59,47 @@ Check its firmware version:
 bond version
 ```
 
-List its devices:
+## Device Management
+
+Create a template device:
+
+```bash
+bond devices create --name "Formidable Fan" --location "Bedroom" --template A1 --addr 101 --freq 300000 --bps 1000 --zero_gap 1234
+```
+
+You can then see the fan on your Bond Home app.
+
+List existing devices:
 
 ```bash
 bond devices list
 ```
 
-## Injecting Devices
-
-Create a template device:
+Delete one or more devices:
 
 ```bash
-bond devices create --name "Formidable Fan" --template A1 --addr 101 --freq 300000 --bps 1000 --zero_gap 1234
+bond devices delete <DEVICE1_ID> <DEVICE2_ID>
 ```
 
-You can then see the fan on your Bond Home app.
+## Device Groups
+
+Create a device group:
+
+```bash
+bond groups create --name "All Shades" <BOND1_ID>:<DEVICE1_ID> <BOND2_ID>:<DEVICE1_ID> <BOND2_ID>:<DEVICE2_ID> 
+```
+
+List the existing device groups:
+
+```bash
+bond groups list
+```
+
+List the device groups on a single Bond (may not represent the whole group):
+
+```bash
+bond groups list --bond-id <BOND_ID>
+```
 
 ## Live Logging
 
