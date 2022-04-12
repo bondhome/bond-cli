@@ -66,4 +66,4 @@ jobs:
             ${{ steps.cov-diff.outputs.result }}
             ```
       - name: Check coverage
-        run: awk 'BEGIN{ if (${{ env.cov_base }} > ${{ env.cov_head }}) {print "::error::Coverage has decreased from ${{ env.cov_base }}% to ${{ env.cov_head }}
+        run: awk 'BEGIN{ if (${{ env.cov_base }} > ${{ env.cov_head }}) {print "::error::Coverage has decreased from ${{ env.cov_base }}% to ${{ env.cov_head }}%"; exit 1;} else {print "OK! Total coverage is ${{ env.cov_head }}%"}}'
