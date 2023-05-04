@@ -14,7 +14,7 @@ setup(
     description="Bond CLI",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     setup_requires=["pytest-runner"],
     install_requires=DEPS_ALL,
     tests_require=DEPS_TEST,
