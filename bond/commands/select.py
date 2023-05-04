@@ -1,4 +1,4 @@
-from bond.commands.token import check_unlocked_token
+from bond.commands.token import check_unlocked_token, unlock_token
 from bond.database import BondDatabase
 
 
@@ -14,6 +14,7 @@ class SelectCommand(object):
                        (you can also use a prefix, if it uniquely identifies an
                        already-discovered Bond""",
         },
+        "--pin": {"help": "specify Bond PIN to automatically unlock token"},
         "--clear": {"action": "store_true", "help": "clear selection"},
         "--ip": {"help": "specify Bond IP address"},
         "--port": {"help": "specify Bond HTTP port"},
@@ -21,11 +22,7 @@ class SelectCommand(object):
 
     def run(self, args):
         if args.bond_id:
-            matches = [
-                bond
-                for bond in BondDatabase.get_bonds()
-                if bond.lower().startswith(args.bond_id.lower())
-            ]
+            matches = [bond for bond in BondDatabase.get_bonds() if bond.lower().startswith(args.bond_id.lower())]
             if len(matches) == 0:
                 proceed = input(
                     f"{args.bond_id} hasn't been discovered by bond-cli ('bond discover').\n"
@@ -34,9 +31,7 @@ class SelectCommand(object):
                 if proceed.lower() == "y":
                     bond_id = args.bond_id
                 else:
-                    raise SystemExit(
-                        "Aborting. Try 'bond discover' on the same network as your Bond"
-                    )
+                    raise SystemExit("Aborting. Try 'bond discover' on the same network as your Bond")
             if len(matches) == 1:
                 bond_id = matches[0]
             if len(matches) > 1:
@@ -52,7 +47,11 @@ class SelectCommand(object):
                 BondDatabase.set_bond(bond_id, "port", args.port)
                 print(f"Set {bond_id} port {args.ip}")
             print(f"Selected Bond: {BondDatabase().get('selected_bondid')}")
-            token = check_unlocked_token()  # noqa: F841
+            if args.pin:
+                print("Unlocking token...")
+                token = unlock_token(bond_id, args.pin)
+            else:
+                token = check_unlocked_token()  # noqa: F841
         elif args.clear:
             BondDatabase().pop("selected_bondid", None)
             print("Cleared selected Bond")
