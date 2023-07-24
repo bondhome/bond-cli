@@ -3,6 +3,7 @@ from bond.database import BondDatabase
 import json
 import os
 from pprint import pprint
+import threading
 
 
 def drop_shadow(bondid):
@@ -86,12 +87,37 @@ class SyncCommand(object):
             "help": "Print out the shadow after syncing",
             "action": "store_true",
         },
+        "--all": {
+            "help": "Sync all bonds",
+            "action": "store_true",
+        },
     }
 
     def run(self, args):
-        bondid = BondDatabase.get_assert_selected_bondid()
-        if args.full:
-            drop_shadow(bondid)
-        sync(bondid, verbose=args.verbose)
-        if args.print:
-            pprint(BondDatabase.get("bonds")[bondid]['shadow'])
+        if args.all:
+            bondids = BondDatabase.get_bonds().keys()
+            print(f"Syncing {len(bondids)} bonds...")
+        else:
+            bondids = [BondDatabase.get_assert_selected_bondid()]
+
+        def worker(bondid):
+            if args.full:
+                drop_shadow(bondid)
+            try:
+                sync(bondid, verbose=args.verbose)
+                print(f"{bondid} synced.")
+            except Exception as e:
+                errmsg = str(type(e).__name__)
+                print(f"Error syncing {bondid}: {errmsg}")
+
+        threads = []
+        for bondid in bondids:
+            t = threading.Thread(target=worker, args=(bondid,))
+            t.start()
+            threads.append(t)
+        for t in threads:
+            t.join()
+        if args.all:
+            print("Sync complete.")
+
+
