@@ -81,3 +81,11 @@ class BondDatabase(MutableMapping):
     @staticmethod
     def set(key, value):
         BondDatabase()[key] = value
+
+    @staticmethod
+    def get(key):
+        return BondDatabase()[key]
+    
+    @staticmethod
+    def get_shadow(bondid):
+        return BondDatabase().get_bond(bondid).get("shadow", dict())
