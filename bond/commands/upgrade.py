@@ -128,6 +128,9 @@ class UpgradeCommand(object):
         print(f"Selected Branch: \t{branch}")
         print(f"Current Version: \t{current_ver}")
         version_obj = get_s3_version(target, branch, args.age)
+        if args.target:
+            # required as of v4.6.10 fw
+            version_obj["override_target"] = True
         new_ver = version_obj["version"]
         print(f"Installing Version: \t{new_ver}")
         if new_ver == current_ver:
