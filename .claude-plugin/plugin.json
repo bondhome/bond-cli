@@ -1,0 +1,13 @@
+{
+  "name": "bondhome",
+  "description": "Control Bond Home smart devices - ceiling fans, shades, lights, fireplaces - via natural language",
+  "version": "1.0.0",
+  "author": {
+    "name": "Bond Home",
+    "email": "support@bondhome.io"
+  },
+  "homepage": "https://bondhome.io",
+  "repository": "https://github.com/bondhome/bond-cli",
+  "license": "MIT",
+  "keywords": ["bond", "smart-home", "ceiling-fan", "shades", "automation", "iot"]
+}
