@@ -38,6 +38,7 @@ def do_livelog(bondid, ip, port, key):
         if rsp['b']['_error_id'] == 1104:
             raise Exception("Encryption key is required by this Bond. Provide with --key option.")
 
+
 def get_my_ip(remote_host):
     """
     Determine local IP by opening a UDP socket to a known remote host
