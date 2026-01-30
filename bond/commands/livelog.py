@@ -2,6 +2,7 @@ import datetime
 import os
 import random
 import socket
+import string
 import sys
 import time
 import hashlib
@@ -138,13 +139,14 @@ class LivelogCommand(object):
         # Otherwise, we spin up a local UDP server to receive logs
         my_ip = get_my_ip(BondDatabase.get_bonds()[bond_id]["ip"])
         sock, UDP_PORT = listen(my_ip)
-        do_livelog(bond_id, my_ip, UDP_PORT, args.key)
+        key = args.key or ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+        do_livelog(bond_id, my_ip, UDP_PORT, key)
         print(f"Listening for live logs on udp://{my_ip}:{UDP_PORT}")
 
-        # Prepare AES if key is given
+        # Prepare AES decryption
         aes_cipher = None
-        if args.key:
-            hash_output = hashlib.sha256(args.key.encode()).digest()
+        if key:
+            hash_output = hashlib.sha256(key.encode()).digest()
             # Use first 16 bytes for AES-128
             aes_key = hash_output[:16]
             aes_cipher = AES.new(aes_key, AES.MODE_ECB)  # re-created as needed
