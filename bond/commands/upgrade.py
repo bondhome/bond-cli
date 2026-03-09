@@ -86,7 +86,7 @@ class UpgradeCommand(object):
             "'alpha' and 'trunk' are for internal development use, and may be unstable."
         },
         "--target": {
-            "help": "override detected target. Useful in development, but may cause irreversible device malfunction!"
+            "help": "override detected target. WARNING: changing targets usually causes devices to malfunction and may brick them."
         },
         "--age": {
             "help": "number of releases to go back to. 0 is the latest version, 1 is the one before that and so on.",
@@ -111,18 +111,28 @@ class UpgradeCommand(object):
             print(f"Requested Target: \t{args.target}")
             if args.target != target:
                 print("Detected and requested targets do not match!")
+                print()
                 print(
-                    "WARNING: Continuing may cause irreversible device damage or even a fire hazard."
+                    "WARNING: Changing targets usually causes devices to malfunction\n"
+                    "and may permanently brick them due to bootloader incompatibilities.\n"
+                    "\n"
+                    "NOTE: The zermatt -> zermatt-2 transition happens automatically\n"
+                    "during normal firmware upgrades. Do NOT manually override target\n"
+                    "for this transition.\n"
+                    "\n"
+                    "Only proceed if you are a developer who understands the specific\n"
+                    "bootloader and hardware implications of this target change."
                 )
+                print()
                 response = input(
                     "Are you sure you know EXACTLY what you're doing? [N/yessir] "
                 )
                 if response != "yessir":
                     raise SystemExit("Yeah, best not to override the target anyways.")
-                if input("Have your fire extinguisher ready? [N/y]").lower() != "y":
+                if input("Have your fire extinguisher ready? [N/y] ").lower() != "y":
                     raise SystemExit("Well, go find one!")
                 target = args.target
-                print("Target manually overriden.")
+                print("Target manually overridden.")
 
         branch = get_branch_string(args.branch, target)
         print(f"Selected Branch: \t{branch}")
