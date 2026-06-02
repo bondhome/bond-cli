@@ -9,7 +9,7 @@ setup(
     version="0.3.0",
     author="Olibra",
     packages=find_packages(),
-    scripts=["bond/bond"],
+    entry_points={"console_scripts": ["bond=bond.app:main"]},
     include_package_data=True,
     description="Bond CLI",
     long_description=open("README.md", encoding="utf-8").read(),

@@ -1,5 +1,6 @@
 import sys
 
+from bond.cli.console import console_terminate
 from bond.cli.main import load_commands, execute_from_command_line
 from bond.commands.backup import BackupCommand, RestoreCommand
 from bond.commands.devices import DevicesCommand
@@ -40,3 +41,10 @@ COMMANDS = [
 def run():
     load_commands(COMMANDS)
     execute_from_command_line(sys.argv)
+
+
+def main():
+    try:
+        run()
+    finally:
+        console_terminate()
