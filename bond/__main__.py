@@ -1,8 +1,4 @@
-from bond import app
-from bond.cli.console import console_terminate
+from bond.app import main
 
 if __name__ == "__main__":
-    try:
-        app.run()
-    finally:
-        console_terminate()
+    main()
