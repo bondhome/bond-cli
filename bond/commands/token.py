@@ -37,6 +37,11 @@ class TokenCommand(object):
     help = "Manage token-based authentication."
     arguments = {
         "token": {"help": "Save Bond token to local database", "nargs": "?"},
+        "--pin": {
+            "nargs": "?",
+            "const": "",
+            "help": "unlock token with the Bond PIN (prompts for the PIN if no value is given)",
+        },
         "--bond-id": {"help": "ignore selected Bond and use provided"},
     }
 
@@ -44,8 +49,13 @@ class TokenCommand(object):
         bond_id = args.bond_id or BondDatabase.get_assert_selected_bondid()
         if args.token:
             update_token(args.token, bond_id)
+        elif args.pin is not None:
+            print("Unlocking token...")
+            if not unlock_token(bond_id, args.pin):
+                print(f"Failed to unlock {bond_id}'s token. Check the PIN and try again.")
         elif not check_unlocked_token(bond_id):
             print(f"{bond_id}'s token is not unlocked.")
+            print("You can unlock it with the Bond PIN: 'bond token --pin'")
             stored_token = BondDatabase.get_bond(bond_id).get("token")
             if stored_token:
                 print(f"There's already a token for {bond_id} in your local database: {stored_token}.")
