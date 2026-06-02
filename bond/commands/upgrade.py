@@ -86,7 +86,8 @@ class UpgradeCommand(object):
             "'alpha' and 'trunk' are for internal development use, and may be unstable."
         },
         "--target": {
-            "help": "override detected target. WARNING: changing targets usually causes devices to malfunction and may brick them."
+            "help": "override detected target. WARNING: changing targets usually causes "
+            "devices to malfunction and may brick them."
         },
         "--age": {
             "help": "number of releases to go back to. 0 is the latest version, 1 is the one before that and so on.",
