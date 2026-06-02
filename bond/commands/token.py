@@ -8,7 +8,7 @@ def update_token(token, bond_id=None):
     if bond_id not in bonds.keys():
         bonds[bond_id] = dict()
     bonds[bond_id]["token"] = token
-    print(f"Updated token for {bond_id}")
+    print(f"Updated token for {bond_id}: {token}")
     BondDatabase.set("bonds", bonds)
 
 
