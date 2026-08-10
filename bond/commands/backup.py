@@ -1,6 +1,8 @@
 import datetime
 import os
 import time
+import ssl
+import socket
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 from queue import Queue
@@ -12,7 +14,6 @@ import bond.proto
 from bond.database import BondDatabase, DB_DIRNAME
 
 Q = Queue()
-
 
 class ChunkedRequestHandler(SimpleHTTPRequestHandler):
     def do_PUT(self):
@@ -45,35 +46,91 @@ class ChunkedRequestHandler(SimpleHTTPRequestHandler):
                         break
         Q.put(path)
 
+    def handle(self):
+        if hasattr(self.connection, 'version'):
+            ssl_version = self.connection.version()
+            print(f"Connected using TLS version: {ssl_version}")
+        else:
+            print("No TLS connection or non-SSL connection detected.")
+        super().handle()
 
-def start_daemon(port):
+def start_daemon(port, protocol="http"):
+    print(f"Starting server on port {port} with protocol {protocol}")
     os.chdir(DB_DIRNAME)
-    httpd = HTTPServer(("0.0.0.0", port), ChunkedRequestHandler)
-    print("Serving at port:", httpd.server_port)
-    Thread(target=httpd.serve_forever, daemon=True).start()
+    handler = ChunkedRequestHandler
+    print(f"Handler assigned: {handler}")
 
+    if protocol in ["https", "https-insecure"]:
+        # Need to add certificate with name cert.pem and key with name key.pem for
+        # testing https connection.
+        base_dir = os.path.dirname(os.path.abspath(__file__))  # current script directory
+        cert_path = os.path.join(base_dir, "cert.pem")
+        key_path = os.path.join(base_dir, "key.pem")
+
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        if protocol == "https-insecure":
+            context.check_hostname = False
+            context.verify_mode = ssl.CERT_NONE
+            context.set_ciphers("DEFAULT")
+        context.load_cert_chain(certfile=cert_path, keyfile=key_path)
+
+        # HTTPS Server start
+        httpd=HTTPServer(('0.0.0.0', port), handler)
+        print("Wrapping socket with SSL...")
+        httpd.socket = context.wrap_socket(httpd.socket, server_side=True)
+        print(f"Serving at https://0.0.0.0:{port}")
+        Thread(target=httpd.serve_forever, daemon=True).start()
+
+    else:
+        # HTTP Server start
+        httpd=HTTPServer(('0.0.0.0', port), handler)
+        print(f"Serving at http://0.0.0.0:{port}")
+        Thread(target=httpd.serve_forever, daemon=True).start()
 
 def wait_upload(timeout=None):
     return Q.get(timeout=timeout)
-
 
 class BackupCommand(object):
     subcmd = "backup"
     help = """Backup a Bond"""
     arguments = {
         "--bond-id": {"help": "ignore selected Bond and use provided"},
+        "--protocol": {"help": "Choose protocol: http, https, https-insecure", "choices": ["http", "https", "https-insecure"]},
     }
 
     def run(self, args):
-        start_daemon(4444)
+        protocol = args.protocol or "http"
+        start_daemon(4444, protocol)
         bondid = args.bond_id or BondDatabase.get_assert_selected_bondid()
         timestamp = str(int(time.time()))
-        body = {
+        security_level = 0
+        if protocol == "https-insecure":
+            security_level = 1
+            body = {
+                "backup": 1,
+                "https_port": "4444",
+                "path": "",
+                "timestamp": timestamp,
+                "security": security_level,
+            }
+        elif protocol == "https":
+            security_level = 2
+            body = {
+                "backup": 1,
+                "https_port": "4444",
+                "path": "",
+                "timestamp": timestamp,
+                "security": security_level,
+            }
+        else:
+            body = {
             "backup": 1,
             "http_port": "4444",
             "path": "",
             "timestamp": timestamp,
+            "security": security_level,
         }
+
         rsp = bond.proto.put(bondid, topic="sys/backup", body=body)
         print(rsp)
         if rsp["s"] != 200:
@@ -134,10 +191,13 @@ class RestoreCommand(object):
             "help": "Only for test purposes. May cause unexpected behavior.",
             "action": "store_true",
         },
-        "--bond-id": {"help": "ignore selected Bond and use provided"},
+        "--bond-id": {"help": "ignore selected Bond and use provided",
+        },
+        "--protocol": {"help": "Choose protocol: http, https, https-insecure", "choices": ["http", "https", "https-insecure"]},
     }
 
     def run(self, args):  # noqa: C901
+        protocol = args.protocol or "http"
         file_list = get_file_list()
         if args.list or not (args.file or args.latest) or len(file_list) == 0:
             if len(file_list) == 0:
@@ -154,15 +214,36 @@ class RestoreCommand(object):
                 return
             args.file = file_list[-1]["file"]
 
-        start_daemon(4444)
+        start_daemon(4444, protocol)
         bondid = args.bond_id or BondDatabase.get_assert_selected_bondid()
         # timestamp = str(int(time.time()))
-        body = {
-            "restore": 1,
-            "http_port": "4444",
-            "path": "",
-            "filename": args.file,
-        }
+        security_level = 0
+        if protocol == "https-insecure":
+            security_level = 1
+            body = {
+                "restore": 1,
+                "https_port": "4444",
+                "path": "",
+                "filename": args.file,
+                "security": security_level,
+            }
+        elif protocol == "https":
+            security_level = 2
+            body = {
+                "restore": 1,
+                "https_port": "4444",
+                "path": "",
+                "filename": args.file,
+                "security": security_level,
+            }
+        else:
+            body = {
+                "restore": 1,
+                "http_port": "4444",
+                "path": "",
+                "filename": args.file,
+                "security": security_level,
+            }
         rsp = bond.proto.put(bondid, topic="sys/backup", body=body)
         print(rsp)
         if rsp["s"] != 200:
