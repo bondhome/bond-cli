@@ -74,3 +74,38 @@ Uses `MutableMapping` interface with thread-safe RLock.
 
 - Tests run on Python 3.7, 3.8, 3.9
 - Releases: bump version in `setup.py`, create annotated git tag (`git tag -a "vX.Y.Z"`), push to trigger PyPI deployment
+
+## Claude Code Plugin
+
+This repository is also a Claude Code plugin for natural language control of Bond Home devices.
+
+### Installation
+
+```
+/plugin add bondhome/bond-cli
+```
+
+### Usage
+
+After installation, use natural language to control devices:
+
+- "Turn on the bedroom fan"
+- "Set living room fan to speed 3"
+- "Open the office shades"
+- "Turn off all lights"
+- "What's the status of my devices?"
+
+### Skill Structure
+
+- `skills/assistant/SKILL.md` - Core skill with common operations
+- `skills/assistant/references/` - Detailed reference documents for specific domains:
+  - `discovery-auth.md` - mDNS discovery, token retrieval
+  - `actions-fan.md` - Ceiling fan actions
+  - `actions-shades.md` - Motorized shade actions
+  - `actions-light.md` - Light actions
+  - `actions-fireplace.md` - Fireplace/heater actions
+  - `device-types.md` - Device type reference
+  - `groups-scenes.md` - Multi-device control
+  - `schedules.md` - Time-based automation
+  - `system.md` - System operations
+  - `troubleshooting.md` - Error diagnosis
