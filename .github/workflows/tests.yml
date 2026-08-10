@@ -1,0 +1,69 @@
+name: Run Python tests
+
+on: pull_request
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.9"
+
+      - name: Checkout base ref
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.base_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt -r requirements-test.txt
+
+      - name: Install Bond CLI
+        run: pip install -e .
+
+      - name: Calculate base coverage
+        run: pytest -q . && coverage report -m --precision=2 | tee /tmp/cov_base | tail -n1 | sed 's/%//g' | awk '{printf "cov_base=%s", $4}' >> $GITHUB_ENV
+        working-directory: .
+
+      - name: Checkout head
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt -r requirements-test.txt
+
+      - name: Install Bond CLI
+        run: pip install -e .
+
+      - name: Calculate HEAD coverage
+        run: pytest -q . && coverage report -m --precision=2 | tee /tmp/cov_head | tail -n1 | sed 's/%//g' | awk '{printf "cov_head=%s", $4}' >> $GITHUB_ENV
+        working-directory: .
+
+      - name: Display coverage diff
+        continue-on-error: true
+        run: diff /tmp/cov_base /tmp/cov_head | tee /tmp/diff
+
+      - name: Set diff output to variable
+        id: cov-diff
+        run: |
+          content=$(cat /tmp/diff)
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          echo "::set-output name=result::$content"
+
+      - uses: marocchino/sticky-pull-request-comment@v2
+        if: steps.cov-diff.outputs.result != ''
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          message: |
+            Coverage diff of ${{ github.event.pull_request.head.sha }}.
+            ```diff
+            ${{ steps.cov-diff.outputs.result }}
+            ```
+      - name: Check coverage
+        run: awk 'BEGIN{ if (${{ env.cov_base }} > ${{ env.cov_head }}) {print "::error::Coverage has decreased from ${{ env.cov_base }}% to ${{ env.cov_head }}%"; exit 1;} else {print "OK! Total coverage is ${{ env.cov_head }}%"}}'
